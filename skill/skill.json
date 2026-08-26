@@ -1,0 +1,17 @@
+{
+  "name": "skill_truy_xuat_gg_sheet_doc",
+  "version": "2.0.0",
+  "label": "Skill Truy Xuất Google Drive, Sheets & Excel (SOP 4 Bước Độc Lập)",
+  "description": "Sổ tay nghiệp vụ SOP 4 bước: Tìm File -> Trinh sát Sheet (lọc bỏ Sheet ẩn, hỗ trợ .xlsm, .xlsb, .xls, .csv, .ods) -> Lọc Tọa Độ (bỏ cột/hàng ẩn, ép kiểu Datetime DD/MM/YYYY) -> Rút Trích Dữ Liệu và xuất Bảng Markdown chuẩn.",
+  "author": "Enterprise AI Orchestrator",
+  "files": [
+    "SKILL.md",
+    "Muc_Luc_Tai_Lieu.json"
+  ],
+  "tools_used": [
+    "Tìm Kiếm File Trên Google Drive",
+    "Trinh Sát Cấu Trúc Trang Tính",
+    "Quét Cấu Trúc Bảng Tính (Schema Scanner)",
+    "Trích Xuất Dữ Liệu Google Sheets (Data Extractor)"
+  ]
+}

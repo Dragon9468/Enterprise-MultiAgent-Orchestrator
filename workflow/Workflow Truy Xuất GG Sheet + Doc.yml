@@ -1,0 +1,561 @@
+agent_packages:
+  agent_1:
+    metadata:
+      description: Agent Chuyên trách Truy xuất Dữ liệu Google Sheets và Tài liệu
+        Google Drive theo Ma trận Phân quyền 3 Biến (role_level, department, department_id)
+        vận hành băng chuyền 3 Tool (Locate -> Scan -> Extract).
+      icon: 🤖
+      icon_background: '#D5D9EB'
+      icon_type: emoji
+      name: Agent Truy xuất GG Sheet + Doc import 2
+      role: Data Retrieval & Sheet Extraction Specialist
+    omitted_assets: []
+    schema_version: 1
+    soul:
+      app_features:
+        file_upload:
+          allowed_file_extensions:
+          - JPG
+          - JPEG
+          - PNG
+          - GIF
+          - WEBP
+          - SVG
+          allowed_file_types:
+          - document
+          - image
+          - audio
+          - video
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          enabled: true
+          image:
+            enabled: true
+          number_limits: 3
+        opening_statement: null
+        retriever_resource: null
+        sensitive_word_avoidance: null
+        speech_to_text: null
+        suggested_questions: null
+        suggested_questions_after_answer: null
+        text_to_speech: null
+      app_variables:
+      - default: ''
+        name: emp_id
+        required: false
+        type: string
+      - default: '1'
+        name: role_level
+        required: false
+        type: string
+        description: Cấp bậc người dùng (1..5)
+      - default: IBB
+        name: department
+        required: false
+        type: string
+      - default: '1'
+        name: department_id
+        required: false
+        type: string
+      config_files: []
+      config_note: ''
+      config_skills: []
+      env:
+        secret_refs: []
+        variables: []
+      files:
+        files: []
+        skills: []
+      human:
+        contacts: []
+        tools: []
+      knowledge:
+        sets: []
+      memory:
+        artifacts: []
+        budget: null
+        scope: null
+      misc_legacy:
+        file_upload:
+          allowed_file_extensions:
+          - JPG
+          - JPEG
+          - PNG
+          - GIF
+          - WEBP
+          - SVG
+          allowed_file_types:
+          - document
+          - image
+          - audio
+          - video
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          enabled: true
+          image:
+            enabled: true
+          number_limits: 3
+        opening_statement: null
+        retriever_resource: null
+        sensitive_word_avoidance: null
+        speech_to_text: null
+        suggested_questions: null
+        suggested_questions_after_answer: null
+        text_to_speech: null
+      model:
+        credential_ref: null
+        model: gemini-3.6-flash
+        model_provider: langgenius/gemini/google
+        model_settings:
+          frequency_penalty: null
+          max_tokens: null
+          presence_penalty: null
+          response_format: null
+          stop: null
+          temperature: null
+          top_p: null
+        plugin_id: langgenius/gemini
+      prompt:
+        system_prompt: "Bạn là \"Agent Truy xuất GG Sheet + Doc\". Nhiệm vụ của bạn\
+          \ là tra cứu và trích xuất dữ liệu Google Drive / Google Sheets theo yêu\
+          \ cầu người dùng và phân quyền 3 biến (role_level, department, department_id).\n\
+          \nMA TRẬN MỤC LỤC TÀI LIỆU & PHÂN QUYỀN (JSON):\n```json\n{\n  \"title\"\
+          : \"Enterprise AI - Ma Trận Phân Quyền & Mục Lục Tài Liệu Google Drive\
+          \ (3 Biến)\",\n  \"version\": \"3.0.0\",\n  \"last_updated\": \"2026-08-24\"\
+          ,\n  \"key_format\": \"LV{role_level}_DEPT_{department}_ID_{department_id}\"\
+          ,\n  \"description\": \"Bảng ma trận định vị folder_id và keyword tra cứu\
+          \ file Google Drive/Sheets dựa theo 3 biến: role_level (1-5), department\
+          \ (IBB, USER, INF, CSKH, QA, HR), và department_id (1, 2, 3, ALL)\",\n \
+          \ \"departments_info\": {\n    \"IBB\": {\n      \"name_vi\": \"Internet\
+          \ Băng Rộng (IBB / Kinh doanh)\",\n      \"aliases\": [\"ibb\", \"kinh doanh\"\
+          , \"sales\", \"goi cuoc\", \"doanh so\", \"pttb\"]\n    },\n    \"USER\"\
+          : {\n      \"name_vi\": \"Người dùng cuối & Thuê bao (USER)\",\n      \"\
+          aliases\": [\"user\", \"khach hang\", \"thue bao\", \"hop dong\", \"cuoc\"\
+          ]\n    },\n    \"INF\": {\n      \"name_vi\": \"Hạ tầng & Kỹ thuật mạng\
+          \ (INF / Infrastructure)\",\n      \"aliases\": [\"inf\", \"ha tang\", \"\
+          ky thuat\", \"pop\", \"suy hao\", \"quang\", \"tram\", \"tuyen cap\"]\n\
+          \    },\n    \"CSKH\": {\n      \"name_vi\": \"Chăm sóc Khách hàng (CSKH)\"\
+          ,\n      \"aliases\": [\"cskh\", \"cham soc khach hang\", \"khieu nai\"\
+          , \"ticket\", \"dvk\"]\n    },\n    \"QA\": {\n      \"name_vi\": \"Quản\
+          \ lý Chất lượng (QA / Quality Assurance)\",\n      \"aliases\": [\"qa\"\
+          , \"chat luong\", \"kiem soat\", \"sla\", \"danh gia\", \"tieu chuan\"]\n\
+          \    },\n    \"HR\": {\n      \"name_vi\": \"Quản trị Nhân sự (HR / Human\
+          \ Resources)\",\n      \"aliases\": [\"hr\", \"nhan su\", \"nhan vien\"\
+          , \"cham cong\", \"luong\", \"dao tao\"]\n    }\n  },\n  \"catalog\": {\n\
+          \    \"LV1_DEPT_IBB_ID1\": {\n      \"role_level\": 1,\n      \"department\"\
+          : \"IBB\",\n      \"department_id\": \"1\",\n      \"folder_id\": \"1IBB_STAFF_KV1_FOLDER\"\
+          ,\n      \"description\": \"Nhân viên kinh doanh IBB - Khu vực 1 (Bảng giá,\
+          \ KPI cá nhân, Phát triển mới)\",\n      \"topics\": [\n        {\n    \
+          \      \"topic_name\": \"Bảng giá & Gói cước IBB\",\n          \"keywords\"\
+          : [\"BANG_GIA\", \"GOI_CUOC\", \"GIGA\", \"SKY\", \"META\", \"F_GAME\"],\n\
+          \          \"default_sheet_range\": \"Goi_Cuoc!A1:F50\"\n        },\n  \
+          \      {\n          \"topic_name\": \"KPI Doanh số Cá nhân\",\n        \
+          \  \"keywords\": [\"DOANH_SO\", \"HOA_HONG\", \"KPI_SALES\", \"PTTB_CA_NHAN\"\
+          ],\n          \"default_sheet_range\": \"DoanhSo_NV!A1:H100\"\n        }\n\
+          \      ]\n    },\n    \"LV1_DEPT_IBB_ID2\": {\n      \"role_level\": 1,\n\
+          \      \"department\": \"IBB\",\n      \"department_id\": \"2\",\n     \
+          \ \"folder_id\": \"1IBB_STAFF_KV2_FOLDER\",\n      \"description\": \"Nhân\
+          \ viên kinh doanh IBB - Khu vực 2 (Bảng giá, KPI cá nhân)\",\n      \"topics\"\
+          : [\n        {\n          \"topic_name\": \"Bảng giá & Gói cước IBB KV2\"\
+          ,\n          \"keywords\": [\"BANG_GIA\", \"GOI_CUOC\", \"GIGA\", \"SKY\"\
+          , \"META\"],\n          \"default_sheet_range\": \"Goi_Cuoc!A1:F50\"\n \
+          \       },\n        {\n          \"topic_name\": \"KPI Doanh số Cá nhân\
+          \ KV2\",\n          \"keywords\": [\"DOANH_SO\", \"HOA_HONG\", \"KPI_SALES\"\
+          , \"PTTB\"],\n          \"default_sheet_range\": \"DoanhSo_NV!A1:H100\"\n\
+          \        }\n      ]\n    },\n    \"LV2_DEPT_IBB_ID1\": {\n      \"role_level\"\
+          : 2,\n      \"department\": \"IBB\",\n      \"department_id\": \"1\",\n\
+          \      \"folder_id\": \"2IBB_SENIOR_KV1_FOLDER\",\n      \"description\"\
+          : \"Chuyên viên kinh doanh IBB KV1 (Báo cáo chỉ tiêu, Target chuyên sâu)\"\
+          ,\n      \"topics\": [\n        {\n          \"topic_name\": \"Báo cáo Target\
+          \ & Doanh số Chuyên sâu\",\n          \"keywords\": [\"TARGET_SALES\", \"\
+          DOANH_THU_CHUYEN_SAU\", \"CHUYEN_DOI\"],\n          \"default_sheet_range\"\
+          : \"Target!A1:G100\"\n        }\n      ]\n    },\n    \"LV3_DEPT_IBB_ID1\"\
+          : {\n      \"role_level\": 3,\n      \"department\": \"IBB\",\n      \"\
+          department_id\": \"1\",\n      \"folder_id\": \"3IBB_LEAD_KV1_FOLDER\",\n\
+          \      \"description\": \"Trưởng nhóm kinh doanh IBB KV1 (Hiệu suất đội\
+          \ nhóm, Phân bổ chỉ tiêu)\",\n      \"topics\": [\n        {\n         \
+          \ \"topic_name\": \"Hiệu suất Đội nhóm IBB KV1\",\n          \"keywords\"\
+          : [\"HIEU_SUAT_DOI_NHOM\", \"KPI_TEAM\", \"TIEN_DO_PTTB\"],\n          \"\
+          default_sheet_range\": \"TeamKPI!A1:Z100\"\n        }\n      ]\n    },\n\
+          \    \"LV4_DEPT_IBB_ID1\": {\n      \"role_level\": 4,\n      \"department\"\
+          : \"IBB\",\n      \"department_id\": \"1\",\n      \"folder_id\": \"ID_FOLDER_IBB1\"\
+          ,\n      \"description\": \"Trưởng phòng Kinh doanh IBB KV1 (Doanh thu tổng,\
+          \ Chiến dịch bán hàng)\",\n      \"topics\": [\n        {\n          \"\
+          topic_name\": \"Doanh thu Tổng hợp Chi nhánh IBB KV1\",\n          \"keywords\"\
+          : [\"DOANH_THU_CHI_NHANH\", \"CHI_TIEU_SALES_THANG\", \"CHIEN_DICH_IBB\"\
+          ],\n          \"default_sheet_range\": \"A1:Z100\"\n        },\n       \
+          \ {\n          \"topic_name\": \"Báo cáo PTTB & Rời mạng Net IBB\",\n  \
+          \        \"keywords\": [\"PTTB_NET\", \"TY_LE_ROI_MANG_IBB\", \"DOANH_SO_TONG\"\
+          ],\n          \"default_sheet_range\": \"BaoCao_Net!A1:Z200\"\n        }\n\
+          \      ]\n    },\n    \"LV5_DEPT_IBB_IDALL\": {\n      \"role_level\": 5,\n\
+          \      \"department\": \"IBB\",\n      \"department_id\": \"ALL\",\n   \
+          \   \"folder_id\": \"5IBB_DIRECTOR_ALL_FOLDER\",\n      \"description\"\
+          : \"Ban Giám đốc - Khối IBB Toàn quốc/Chi nhánh\",\n      \"topics\": [\n\
+          \        {\n          \"topic_name\": \"Báo cáo Hợp nhất Doanh thu IBB\"\
+          ,\n          \"keywords\": [\"HOP_NHAT_IBB\", \"TONG_QUAN_DOANH_THU\", \"\
+          SO_SANH_CHI_NHANH\"],\n          \"default_sheet_range\": \"A1:Z200\"\n\
+          \        }\n      ]\n    },\n    \"LV1_DEPT_USER_ID1\": {\n      \"role_level\"\
+          : 1,\n      \"department\": \"USER\",\n      \"department_id\": \"1\",\n\
+          \      \"folder_id\": \"1USER_STAFF_KV1_FOLDER\",\n      \"description\"\
+          : \"Nhân viên Quản lý Thuê bao / Hợp đồng User KV1\",\n      \"topics\"\
+          : [\n        {\n          \"topic_name\": \"Danh sách Thuê bao & Hợp đồng\"\
+          ,\n          \"keywords\": [\"HOP_DONG\", \"THUE_BAO\", \"CUOC\", \"KHACH_HANG\"\
+          ],\n          \"default_sheet_range\": \"Danh_Sach_HD!A1:H100\"\n      \
+          \  }\n      ]\n    },\n    \"LV3_DEPT_USER_ID2\": {\n      \"role_level\"\
+          : 3,\n      \"department\": \"USER\",\n      \"department_id\": \"2\",\n\
+          \      \"folder_id\": \"ID_FOLDER_USER2\",\n      \"description\": \"Trưởng\
+          \ nhóm Quản trị User KV2 (Báo cáo hoạt động thuê bao, Phân tích nhóm khách\
+          \ hàng)\",\n      \"topics\": [\n        {\n          \"topic_name\": \"\
+          Phân tích Nhóm Khách hàng & Hành vi User KV2\",\n          \"keywords\"\
+          : [\"HANH_VI_USER\", \"NHOM_KHACH_HANG\", \"BIEN_DONG_THUE_BAO\"],\n   \
+          \       \"default_sheet_range\": \"UserAnalytics!A1:Z100\"\n        }\n\
+          \      ]\n    },\n    \"LV4_DEPT_USER_ID1\": {\n      \"role_level\": 4,\n\
+          \      \"department\": \"USER\",\n      \"department_id\": \"1\",\n    \
+          \  \"folder_id\": \"4USER_DEPT_HEAD_FOLDER\",\n      \"description\": \"\
+          Trưởng phòng Quản trị Dữ liệu User (Báo cáo Retention & Churn Rate)\",\n\
+          \      \"topics\": [\n        {\n          \"topic_name\": \"Báo cáo Rời\
+          \ mạng & Giữ chân Thuê bao User\",\n          \"keywords\": [\"CHURN_RATE\"\
+          , \"RETENTION_RATE\", \"ROI_MANG_USER\"],\n          \"default_sheet_range\"\
+          : \"Retention!A1:Z100\"\n        }\n      ]\n    },\n    \"LV1_DEPT_INF_ID1\"\
+          : {\n      \"role_level\": 1,\n      \"department\": \"INF\",\n      \"\
+          department_id\": \"1\",\n      \"folder_id\": \"1INF_STAFF_KV1_FOLDER\"\
+          ,\n      \"description\": \"Kỹ thuật viên Hiện trường INF KV1 (Chỉ số suy\
+          \ hao, Đo kiểm tuyến cáp)\",\n      \"topics\": [\n        {\n         \
+          \ \"topic_name\": \"Đo kiểm Suy hao Quang & POP KV1\",\n          \"keywords\"\
+          : [\"SUY_HAO\", \"OPTICAL\", \"RX_POWER\", \"CANH_BAO_POP\"],\n        \
+          \  \"default_sheet_range\": \"BaoCao_SuyHao!A1:F100\"\n        },\n    \
+          \    {\n          \"topic_name\": \"Vật tư Thiết bị POP & Cáp\",\n     \
+          \     \"keywords\": [\"VAT_TU_POP\", \"CAP_QUANG\", \"ODF\", \"SPLITTER\"\
+          , \"MODEM\"],\n          \"default_sheet_range\": \"TonKho_INF!A1:E200\"\
+          \n        }\n      ]\n    },\n    \"LV3_DEPT_INF_ID1\": {\n      \"role_level\"\
+          : 3,\n      \"department\": \"INF\",\n      \"department_id\": \"1\",\n\
+          \      \"folder_id\": \"3INF_LEAD_KV1_FOLDER\",\n      \"description\":\
+          \ \"Trưởng nhóm Kỹ thuật Hạ tầng INF KV1 (Điểm nóng sự cố, Lịch bảo trì)\"\
+          ,\n      \"topics\": [\n        {\n          \"topic_name\": \"Điểm nóng\
+          \ Sự cố Hạ tầng KV1\",\n          \"keywords\": [\"DIEM_NONG_HA_TANG\",\
+          \ \"SU_CO_TRUC\", \"DUT_CAP\", \"BAO_TRI_POP\"],\n          \"default_sheet_range\"\
+          : \"DiemNong!A1:Z100\"\n        }\n      ]\n    },\n    \"LV4_DEPT_INF_ID1\"\
+          : {\n      \"role_level\": 4,\n      \"department\": \"INF\",\n      \"\
+          department_id\": \"1\",\n      \"folder_id\": \"4INF_DEPT_HEAD_FOLDER\"\
+          ,\n      \"description\": \"Trưởng phòng Hạ tầng & Kỹ thuật Mạng INF\",\n\
+          \      \"topics\": [\n        {\n          \"topic_name\": \"Báo cáo Tổng\
+          \ thể Độ sẵn sàng Mạng lưới INF\",\n          \"keywords\": [\"DO_SAN_SANG_MANG\"\
+          , \"UPTIME_POP\", \"QUY_HOACH_HA_TANG\"],\n          \"default_sheet_range\"\
+          : \"A1:Z200\"\n        }\n      ]\n    },\n    \"LV1_DEPT_CSKH_ID1\": {\n\
+          \      \"role_level\": 1,\n      \"department\": \"CSKH\",\n      \"department_id\"\
+          : \"1\",\n      \"folder_id\": \"1CSKH_STAFF_KV1_FOLDER\",\n      \"description\"\
+          : \"Điện thoại viên / Giao dịch viên CSKH KV1 (Ticket khiếu nại, Tiếp nhận\
+          \ yêu cầu)\",\n      \"topics\": [\n        {\n          \"topic_name\"\
+          : \"Ticket Khiếu nại & Xử lý CSKH\",\n          \"keywords\": [\"KHIEU_NAI\"\
+          , \"TICKET\", \"SU_CO_CSKH\", \"YEU_CAU_HO_TRO\"],\n          \"default_sheet_range\"\
+          : \"Khieu_Nai_Ton!A1:G100\"\n        }\n      ]\n    },\n    \"LV3_DEPT_CSKH_ID1\"\
+          : {\n      \"role_level\": 3,\n      \"department\": \"CSKH\",\n      \"\
+          department_id\": \"1\",\n      \"folder_id\": \"3CSKH_LEAD_KV1_FOLDER\"\
+          ,\n      \"description\": \"Trưởng nhóm CSKH KV1 (Chỉ số SLA, CSAT, Năng\
+          \ suất trực tổng đài)\",\n      \"topics\": [\n        {\n          \"topic_name\"\
+          : \"Báo cáo SLA & Đánh giá Hài lòng CSAT\",\n          \"keywords\": [\"\
+          BAO_CAO_SLA\", \"CSAT_SCORE\", \"NANG_SUAT_TONG_DAI\"],\n          \"default_sheet_range\"\
+          : \"SLA_CSAT!A1:Z100\"\n        }\n      ]\n    },\n    \"LV4_DEPT_CSKH_ID1\"\
+          : {\n      \"role_level\": 4,\n      \"department\": \"CSKH\",\n      \"\
+          department_id\": \"1\",\n      \"folder_id\": \"4CSKH_DEPT_HEAD_FOLDER\"\
+          ,\n      \"description\": \"Trưởng phòng Chăm sóc Khách hàng (Báo cáo chất\
+          \ lượng DVKH toàn diện)\",\n      \"topics\": [\n        {\n          \"\
+          topic_name\": \"Tổng hợp Khiếu nại & Chất lượng DVKH Toàn diện\",\n    \
+          \      \"keywords\": [\"TONG_HOP_KHIEU_NAI\", \"CHAT_LUONG_DVKH\", \"FCR_RATE\"\
+          ],\n          \"default_sheet_range\": \"A1:Z100\"\n        }\n      ]\n\
+          \    },\n    \"LV1_DEPT_QA_ID1\": {\n      \"role_level\": 1,\n      \"\
+          department\": \"QA\",\n      \"department_id\": \"1\",\n      \"folder_id\"\
+          : \"1QA_STAFF_KV1_FOLDER\",\n      \"description\": \"Chuyên viên Giám sát\
+          \ Chất lượng QA KV1 (Biên bản kiểm tra, Checklist tuân thủ)\",\n      \"\
+          topics\": [\n        {\n          \"topic_name\": \"Biên bản Kiểm tra Chất\
+          \ lượng & Tuân thủ\",\n          \"keywords\": [\"BIEN_BAN_QA\", \"CHECKLIST_TUAN_THU\"\
+          , \"LOI_QUY_TRINH\"],\n          \"default_sheet_range\": \"KiemTra_QA!A1:G100\"\
+          \n        }\n      ]\n    },\n    \"LV4_DEPT_QA_ID1\": {\n      \"role_level\"\
+          : 4,\n      \"department\": \"QA\",\n      \"department_id\": \"1\",\n \
+          \     \"folder_id\": \"4QA_DEPT_HEAD_FOLDER\",\n      \"description\": \"\
+          Trưởng phòng Quản lý Chất lượng QA (Báo cáo chỉ số lỗi & Xếp hạng chuẩn\
+          \ quy trình)\",\n      \"topics\": [\n        {\n          \"topic_name\"\
+          : \"Báo cáo Chỉ số Lỗi & Đánh giá Tuân thủ Quy trình\",\n          \"keywords\"\
+          : [\"CHI_SO_LOI_QA\", \"DANH_GIA_TUAN_THU\", \"XEP_HANG_CHAT_LUONG\"],\n\
+          \          \"default_sheet_range\": \"A1:Z100\"\n        }\n      ]\n  \
+          \  },\n    \"LV1_DEPT_HR_ID1\": {\n      \"role_level\": 1,\n      \"department\"\
+          : \"HR\",\n      \"department_id\": \"1\",\n      \"folder_id\": \"1HR_STAFF_KV1_FOLDER\"\
+          ,\n      \"description\": \"Chuyên viên Nhân sự HR KV1 (Chấm công, Hồ sơ\
+          \ nhân viên)\",\n      \"topics\": [\n        {\n          \"topic_name\"\
+          : \"Bảng Chấm công & Danh sách Nhân sự\",\n          \"keywords\": [\"CHAM_CONG\"\
+          , \"DANH_SACH_NV\", \"HO_SO_NHAN_SU\"],\n          \"default_sheet_range\"\
+          : \"ChamCong!A1:H100\"\n        }\n      ]\n    },\n    \"LV4_DEPT_HR_ID1\"\
+          : {\n      \"role_level\": 4,\n      \"department\": \"HR\",\n      \"department_id\"\
+          : \"1\",\n      \"folder_id\": \"4HR_DEPT_HEAD_FOLDER\",\n      \"description\"\
+          : \"Trưởng phòng Quản trị Nhân sự HR (Báo cáo biến động nhân sự, Quỹ lương,\
+          \ Đào tạo)\",\n      \"topics\": [\n        {\n          \"topic_name\"\
+          : \"Báo cáo Biến động Nhân sự & Năng suất Lao động\",\n          \"keywords\"\
+          : [\"BIEN_DONG_NHAN_SU\", \"NANG_SUAT_LAO_DONG\", \"DAO_TAO_KPI\"],\n  \
+          \        \"default_sheet_range\": \"A1:Z100\"\n        }\n      ]\n    },\n\
+          \    \"LV5_DEPT_ALL_IDALL\": {\n      \"role_level\": 5,\n      \"department\"\
+          : \"ALL\",\n      \"department_id\": \"ALL\",\n      \"folder_id\": \"5MGMT_BRANCH_REPORTS\"\
+          ,\n      \"description\": \"Ban Giám đốc & Hội đồng Quản trị (Báo cáo hợp\
+          \ nhất toàn chi nhánh)\",\n      \"topics\": [\n        {\n          \"\
+          topic_name\": \"Báo cáo Hợp nhất Toàn diện Chi nhánh\",\n          \"keywords\"\
+          : [\"BAO_CAO_CHI_NHANH\", \"TONG_QUAN_CHI_NHANH\", \"HOP_NHAT\"],\n    \
+          \      \"default_sheet_range\": \"Tong_Hop_KPI!A1:H100\"\n        },\n \
+          \       {\n          \"topic_name\": \"So sánh Hiệu suất Đa Phòng ban\"\
+          ,\n          \"keywords\": [\"SO_SANH_KHU_VUC\", \"XEP_HANG_KV\", \"DIEM_CHAT_LUONG\"\
+          ],\n          \"default_sheet_range\": \"Xep_Hang_KV!A1:G50\"\n        }\n\
+          \      ]\n    }\n  }\n}\n\n```\n\nHƯỚNG DẪN THỰC THI (Theo Skill `skill_truy_xuat_gg_sheet_doc`):\n\
+          1. Đọc file phân quyền `Muc_Luc_Tai_Lieu.json` theo 3 biến (`role_level`,\
+          \ `department`, `department_id`) để xác định danh sách các `folder_id` mục\
+          \ tiêu và các `topics`.\n2. Vận hành băng chuyền cho từng thư mục:\n   -\
+          \ Bước 1: Dùng tool `SearchFile_GGDrive` (Tìm Kiếm File Trên Google Drive)\
+          \ để lấy `file_id`.\n   - Bước 2: Dùng tool `Get_RowColumn_GGSheet` (Quét\
+          \ Cấu Trúc Bảng Tính - Schema Scanner) để lấy danh sách cột và sheet.\n\
+          \   - Bước 3: Dùng tool `Get_Data_GGSheet` (Trích Xuất Dữ Liệu Google Sheets\
+          \ - Data Extractor) để lấy dữ liệu bảng tính.\n3. Nếu lấy data từ nhiều\
+          \ phòng ban/khu vực, thực hiện tuần tự qua tất cả `folder_id`, sau đó tổng\
+          \ hợp số liệu và trình bày bằng BẢNG MARKDOWN rõ ràng, chuyên nghiệp.\n\
+          4. Tuyệt đối tuân thủ phân quyền và trình bày kết quả đầy đủ."
+      sandbox:
+        config:
+          cpu: null
+          env: []
+          image: null
+          working_dir: null
+        provider: null
+      schema_version: 1
+      tools:
+        cli_tools: []
+        dify_tools:
+        - credential_ref: null
+          credential_type: unauthorized
+          description: null
+          enabled: true
+          name: null
+          plugin_id: null
+          provider: Tìm Kiếm File Trên Google Drive
+          provider_id: 0543defe-1371-43d8-80b5-bcb35cc30566
+          provider_type: workflow
+          runtime_parameters: {}
+          tool_name: SearchFile_GGDrive
+        - credential_ref: null
+          credential_type: unauthorized
+          description: null
+          enabled: true
+          name: null
+          plugin_id: null
+          provider: Quét Cấu Trúc Bảng Tính (Schema Scanner)
+          provider_id: 87cd6435-201b-44de-add5-104f23a48ec2
+          provider_type: workflow
+          runtime_parameters: {}
+          tool_name: Get_RowColumn_GGSheet
+        - credential_ref: null
+          credential_type: unauthorized
+          description: null
+          enabled: true
+          name: null
+          plugin_id: null
+          provider: Trích Xuất Dữ Liệu Google Sheets (Data Extractor)
+          provider_id: 36a31aed-7205-42ee-8526-9a81a3cf76a3
+          provider_type: workflow
+          runtime_parameters: {}
+          tool_name: Get_Data_GGSheet
+app:
+  description: Workflow trung gian bọc Agent Truy xuất GG Sheet + Doc thành Tool độc
+    lập.
+  icon: 🤖
+  icon_background: '#D5D9EB'
+  icon_type: emoji
+  mode: workflow
+  name: Workflow Truy Xuất GG Sheet + Doc
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.9.4@9127fda25bd652152a418514dd05c2e88e17883fbf625650f2a8ba2808adf8b9
+    version: null
+kind: app
+version: 0.7.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - JPG
+      - JPEG
+      - PNG
+      - GIF
+      - WEBP
+      - SVG
+      allowed_file_types:
+      - document
+      - image
+      - audio
+      - video
+      allowed_file_upload_methods:
+      - remote_url
+      - local_file
+      enabled: true
+      number_limits: 3
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: agent
+      id: 1787050000001-source-1787548189894-target
+      selected: false
+      source: '1787050000001'
+      sourceHandle: source
+      target: '1787548189894'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: agent
+        targetType: end
+      id: 1787548189894-source-1787050000003-target
+      source: '1787548189894'
+      sourceHandle: source
+      target: '1787050000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: Nhận các tham số truy vấn và phân quyền 3 biến (role_level, department,
+          department_id)
+        selected: false
+        title: Bắt đầu
+        type: start
+        variables:
+        - default: ''
+          hint: Câu hỏi hoặc yêu cầu tra cứu từ người dùng
+          label: query
+          options: []
+          placeholder: 'Ví dụ: Tra cứu bảng giá cước IBB hoặc KPI cá nhân'
+          required: true
+          type: text-input
+          variable: query
+        - default: '1'
+          hint: Cấp bậc phân quyền (1..5)
+          label: role_level
+          options: []
+          placeholder: '1'
+          required: false
+          type: text-input
+          variable: role_level
+        - default: IBB
+          hint: Phòng ban (IBB, USER, INF, CSKH, QA, HR)
+          label: department
+          options: []
+          placeholder: IBB
+          required: false
+          type: text-input
+          variable: department
+        - default: '1'
+          hint: Mã khu vực / đơn vị con (1, 2, 3, ALL)
+          label: department_id
+          options: []
+          placeholder: '1'
+          required: false
+          type: text-input
+          variable: department_id
+        - default: anonymous
+          hint: Mã nhân viên thực hiện tra cứu
+          label: emp_id
+          options: []
+          placeholder: TEST01
+          required: false
+          type: text-input
+          variable: emp_id
+      height: 273
+      id: '1787050000001'
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Xuất kết quả Markdown hoàn chỉnh từ Agent
+        outputs:
+        - value_selector:
+          - '1787548189894'
+          - text
+          variable: result
+        selected: true
+        title: Kết thúc
+        type: end
+      height: 132
+      id: '1787050000003'
+      position:
+        x: 820
+        y: 282
+      positionAbsolute:
+        x: 820
+        y: 282
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        agent_binding:
+          binding_type: roster_agent
+          package_ref: agent_1
+        agent_job:
+          declared_outputs: []
+          human_contacts: []
+          metadata:
+            agent_soul: null
+            file_refs: null
+          mode: tell_agent_what_to_do
+          previous_node_output_refs: []
+          schema_version: 1
+          workflow_prompt: 'Yêu cầu tra cứu: {{#1787050000001.query#}}
+
+
+            Thông tin nhân viên: Mã NV: {{#1787050000001.emp_id#}} | Cấp bậc: {{#1787050000001.role_level#}}
+            | Phòng ban: {{#1787050000001.department#}} | Khu vực: {{#1787050000001.department_id#}}'
+        agent_node_kind: dify_agent
+        selected: false
+        title: Agent
+        type: agent
+        version: '2'
+      height: 118
+      id: '1787548189894'
+      position:
+        x: 454.1909410206008
+        y: 282
+      positionAbsolute:
+        x: 454.1909410206008
+        y: 282
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    viewport:
+      x: 43.64724718351937
+      y: 50.41101126592255
+      zoom: 0.7999999999999999
+  rag_pipeline_variables: []

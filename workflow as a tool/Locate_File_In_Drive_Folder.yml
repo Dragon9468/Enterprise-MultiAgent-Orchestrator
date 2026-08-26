@@ -1,0 +1,373 @@
+app:
+  description: Công cụ quét Mục lục và Thư mục Root Storage để dò tìm chính xác File_ID, File_Name và File_Type (Google Sheet / Excel) dựa trên tên phòng ban và từ khóa.
+  icon: 🔍
+  icon_background: '#E8F0FE'
+  icon_type: emoji
+  mode: workflow
+  name: Tìm Kiếm File Trên Google Drive
+  use_icon_as_answer_icon: false
+dependencies: []
+kind: app
+version: 0.7.0
+workflow:
+  conversation_variables: []
+  environment_variables:
+  - default: https://drive.google.com/drive/folders/YOUR_ROOT_STORAGE_FOLDER_ID
+    description: URL thư mục Storage Public gốc của Enterprise AI
+    id: '1787100000100'
+    name: ROOT_STORAGE_URL
+    value: https://drive.google.com/drive/folders/YOUR_ROOT_STORAGE_FOLDER_ID
+    value_type: string
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: code
+      id: 1787100000001-source-1787100000002-target
+      selected: false
+      source: '1787100000001'
+      sourceHandle: source
+      target: '1787100000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: end
+      id: 1787100000002-source-1787100000003-target
+      selected: false
+      source: '1787100000002'
+      sourceHandle: source
+      target: '1787100000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: Tiếp nhận phòng ban, từ khóa và thông tin phân quyền
+        selected: false
+        title: Bắt đầu
+        type: start
+        variables:
+        - default: IBB
+          hint: Tên phòng ban (Ví dụ IBB, CSKH, INF, QA, HR, USER)
+          label: department
+          max_length: 64
+          options: []
+          required: true
+          type: text-input
+          variable: department
+        - default: ''
+          hint: Từ khóa tên file hoặc chủ đề (Ví dụ DOANH_SO, GOI_CUOC, KPI, SUY_HAO)
+          label: keyword
+          max_length: 256
+          options: []
+          required: false
+          type: text-input
+          variable: keyword
+        - default: '1'
+          hint: Cấp bậc người dùng (1-5)
+          label: role_level
+          max_length: 16
+          options: []
+          required: false
+          type: text-input
+          variable: role_level
+        - default: '1'
+          hint: Khu vực/chi nhánh (1, 2, 3, ALL)
+          label: department_id
+          max_length: 32
+          options: []
+          required: false
+          type: text-input
+          variable: department_id
+        - default: https://drive.google.com/drive/folders/YOUR_ROOT_STORAGE_FOLDER_ID
+          hint: URL thư mục Storage Public gốc
+          label: root_storage_url
+          max_length: 512
+          options: []
+          required: false
+          type: text-input
+          variable: root_storage_url
+      height: 140
+      id: '1787100000001'
+      position:
+        x: 80
+        y: 280
+      positionAbsolute:
+        x: 80
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: |-
+          import json
+          import re
+
+          CATALOG_MAPPING = {
+              "IBB": {
+                  "folder_id": "YOUR_ROOT_STORAGE_FOLDER_ID",
+                  "files": [
+                      {"file_id": "1IBB_DOANHSO_2026_SSID", "file_name": "IBB_DoanhSo_BanMoi_2026.xlsx", "file_type": "excel", "keywords": ["DOANH_SO", "BAN_MOI", "INTERNET", "CAMERA", "DOANHSO", "SALES", "PTTB"]},
+                      {"file_id": "1IBB_BANGGIA_GOICUOC_SSID", "file_name": "IBB_BangGia_GoiCuoc.gsheet", "file_type": "google_sheet", "keywords": ["BANG_GIA", "GOI_CUOC", "GIGA", "SKY", "META", "F_GAME", "CUOC"]}
+                  ]
+              },
+              "INF": {
+                  "folder_id": "YOUR_ROOT_STORAGE_FOLDER_ID",
+                  "files": [
+                      {"file_id": "1INF_SUYHAO_QUANG_SSID", "file_name": "INF_SuyHao_TuyenCap_2026.xlsx", "file_type": "excel", "keywords": ["SUY_HAO", "QUANG", "POP", "TRAM", "HA_TANG", "SUYHAO"]},
+                      {"file_id": "1INF_BAOTRI_POP_SSID", "file_name": "INF_NhatKy_BaoTri_POP.gsheet", "file_type": "google_sheet", "keywords": ["BAO_TRI", "SUA_CHUA", "SU_CO", "POP_LOG"]}
+                  ]
+              },
+              "CSKH": {
+                  "folder_id": "YOUR_ROOT_STORAGE_FOLDER_ID",
+                  "files": [
+                      {"file_id": "1CSKH_TICKET_KHIEUNAI_SSID", "file_name": "CSKH_KhieuNai_XuLyTicket_2026.xlsx", "file_type": "excel", "keywords": ["TICKET", "KHIEU_NAI", "DVK", "KHACH_HANG", "SLA"]},
+                      {"file_id": "1CSKH_DANHGIA_CSAT_SSID", "file_name": "CSKH_KhaoSat_CSAT_DiemHaiLong.gsheet", "file_type": "google_sheet", "keywords": ["CSAT", "HAI_LONG", "KHAO_SAT", "DIEM_CSAT"]}
+                  ]
+              },
+              "QA": {
+                  "folder_id": "YOUR_ROOT_STORAGE_FOLDER_ID",
+                  "files": [
+                      {"file_id": "1QA_SLA_CHATLUONG_SSID", "file_name": "QA_Audit_SLA_ChatLuong_2026.xlsx", "file_type": "excel", "keywords": ["SLA", "AUDIT", "CHAT_LUONG", "DANH_GIA", "TIEU_CHUAN"]}
+                  ]
+              },
+              "HR": {
+                  "folder_id": "YOUR_ROOT_STORAGE_FOLDER_ID",
+                  "files": [
+                      {"file_id": "1HR_NHANSU_CHAMCONG_SSID", "file_name": "HR_NhanSu_ChamCong_2026.xlsx", "file_type": "excel", "keywords": ["NHAN_SU", "CHAM_CONG", "CONG", "DAO_TAO", "NHAN_VIEN"]}
+                  ]
+              },
+              "USER": {
+                  "folder_id": "YOUR_ROOT_STORAGE_FOLDER_ID",
+                  "files": [
+                      {"file_id": "1USER_THUEBAO_HOPDONG_SSID", "file_name": "USER_DanhSach_ThueBao_HopDong.gsheet", "file_type": "google_sheet", "keywords": ["THUE_BAO", "HOP_DONG", "KHACH_HANG", "CUOC"]}
+                  ]
+              }
+          }
+
+          def main(department: str, keyword: str, role_level: str, department_id: str, root_storage_url: str) -> dict:
+              dept = (department or "IBB").strip().upper()
+              kw = (keyword or "").strip().upper()
+              storage_url = root_storage_url or "https://drive.google.com/drive/folders/YOUR_ROOT_STORAGE_FOLDER_ID"
+              
+              # Normalize department aliases
+              if "KINH DOANH" in dept or "SALES" in dept:
+                  dept = "IBB"
+              elif "HA TANG" in dept or "KY THUAT" in dept:
+                  dept = "INF"
+              elif "CHAM SOC" in dept or "TICKET" in dept:
+                  dept = "CSKH"
+              elif "NHAN SU" in dept:
+                  dept = "HR"
+              elif "CHAT LUONG" in dept:
+                  dept = "QA"
+              
+              dept_data = CATALOG_MAPPING.get(dept, CATALOG_MAPPING.get("IBB"))
+              folder_id = dept_data["folder_id"]
+              files = dept_data["files"]
+              
+              matched_file = None
+              if kw:
+                  for f in files:
+                      if any(k in kw or kw in k for k in f["keywords"]):
+                          matched_file = f
+                          break
+              
+              if not matched_file and files:
+                  matched_file = files[0]
+              
+              if matched_file:
+                  return {
+                      "status": "success",
+                      "file_id": matched_file["file_id"],
+                      "file_name": matched_file["file_name"],
+                      "file_type": matched_file["file_type"],
+                      "folder_id": folder_id,
+                      "root_storage_url": storage_url,
+                      "department": dept,
+                      "message": f"Tìm thấy file '{matched_file['file_name']}' (ID: {matched_file['file_id']}, Định dạng: {matched_file['file_type'].upper()}) trong thư mục Storage Public của phòng ban {dept}."
+                  }
+              else:
+                  return {
+                      "status": "not_found",
+                      "file_id": "",
+                      "file_name": "",
+                      "file_type": "unknown",
+                      "folder_id": folder_id,
+                      "root_storage_url": storage_url,
+                      "department": dept,
+                      "message": f"Không tìm thấy file phù hợp cho phòng ban {dept} với từ khóa '{kw}'."
+                  }
+        code_language: python3
+        desc: Quét Mục lục tra cứu file theo phòng ban và từ khóa
+        outputs:
+          department:
+            children: null
+            type: string
+          file_id:
+            children: null
+            type: string
+          file_name:
+            children: null
+            type: string
+          file_type:
+            children: null
+            type: string
+          folder_id:
+            children: null
+            type: string
+          message:
+            children: null
+            type: string
+          root_storage_url:
+            children: null
+            type: string
+          status:
+            children: null
+            type: string
+        selected: false
+        title: 1. Quét Mục Lục & Thư Mục
+        type: code
+        variables:
+        - value_selector:
+          - '1787100000001'
+          - department
+          variable: department
+        - value_selector:
+          - '1787100000001'
+          - keyword
+          variable: keyword
+        - value_selector:
+          - '1787100000001'
+          - role_level
+          variable: role_level
+        - value_selector:
+          - '1787100000001'
+          - department_id
+          variable: department_id
+        - value_selector:
+          - '1787100000001'
+          - root_storage_url
+          variable: root_storage_url
+      height: 52
+      id: '1787100000002'
+      position:
+        x: 380
+        y: 280
+      positionAbsolute:
+        x: 380
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Trả về File_ID, File_Name, File_Type và Folder_ID
+        outputs:
+        - value_selector:
+          - '1787100000002'
+          - file_id
+          variable: file_id
+        - value_selector:
+          - '1787100000002'
+          - file_name
+          variable: file_name
+        - value_selector:
+          - '1787100000002'
+          - file_type
+          variable: file_type
+        - value_selector:
+          - '1787100000002'
+          - folder_id
+          variable: folder_id
+        - value_selector:
+          - '1787100000002'
+          - root_storage_url
+          variable: root_storage_url
+        - value_selector:
+          - '1787100000002'
+          - status
+          variable: status
+        - value_selector:
+          - '1787100000002'
+          - message
+          variable: message
+        selected: false
+        title: Kết thúc
+        type: end
+      height: 180
+      id: '1787100000003'
+      position:
+        x: 680
+        y: 280
+      positionAbsolute:
+        x: 680
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+  viewport:
+    x: 0
+    y: 0
+    zoom: 1

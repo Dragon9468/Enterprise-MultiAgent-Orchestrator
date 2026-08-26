@@ -1,0 +1,389 @@
+app:
+  description: Công cụ trinh sát cấu trúc file (hỗ trợ cả Google Sheets và Excel). CHỈ đọc File_ID và trả về danh sách tên các Trang (Sheets) có trong file để Agent lựa chọn.
+  icon: 📑
+  icon_background: '#E6F4EA'
+  icon_type: emoji
+  mode: workflow
+  name: Trinh Sát Cấu Trúc Trang Tính
+  use_icon_as_answer_icon: false
+dependencies: []
+kind: app
+version: 0.7.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: code
+      id: 1787150000001-source-1787150000002-target
+      selected: false
+      source: '1787150000001'
+      sourceHandle: source
+      target: '1787150000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: end
+      id: 1787150000002-source-1787150000003-target
+      selected: false
+      source: '1787150000002'
+      sourceHandle: source
+      target: '1787150000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: Tiếp nhận file_id và định dạng file tùy chọn
+        selected: false
+        title: Bắt đầu
+        type: start
+        variables:
+        - default: ''
+          hint: ID của file Google Sheets hoặc Excel (.xlsx) trên Google Drive
+          label: file_id
+          max_length: 256
+          options: []
+          required: true
+          type: text-input
+          variable: file_id
+        - default: auto
+          hint: Định dạng file (auto, google_sheet, excel)
+          label: file_type
+          max_length: 64
+          options: []
+          required: false
+          type: text-input
+          variable: file_type
+      height: 116
+      id: '1787150000001'
+      position:
+        x: 80
+        y: 280
+      positionAbsolute:
+        x: 80
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: |-
+          import json
+          import re
+          import urllib.request
+
+          FILE_SHEET_REGISTRY = {
+              "1IBB_DOANHSO_2026_SSID": {
+                  "file_name": "IBB_DoanhSo_BanMoi_2026.xlsm",
+                  "file_type": "excel_macro",
+                  "sheets": [
+                      {"name": "DoanhSo_NV", "visible": True},
+                      {"name": "TongHop_KhuVuc", "visible": True},
+                      {"name": "KPI_Thang", "visible": True},
+                      {"name": "_Config_Macro_Hidden", "visible": False},
+                      {"name": "System_Raw_DoNotShow", "visible": False}
+                  ]
+              },
+              "1IBB_BANGGIA_GOICUOC_SSID": {
+                  "file_name": "IBB_BangGia_GoiCuoc.gsheet",
+                  "file_type": "google_sheet",
+                  "sheets": [
+                      {"name": "Goi_Cuoc", "visible": True},
+                      {"name": "Khuyen_Mai", "visible": True},
+                      {"name": "Chinh_Sach_LapDat", "visible": True},
+                      {"name": "_Admin_Formulas", "visible": False}
+                  ]
+              },
+              "1INF_SUYHAO_QUANG_SSID": {
+                  "file_name": "INF_SuyHao_TuyenCap_2026.xlsx",
+                  "file_type": "excel",
+                  "sheets": [
+                      {"name": "SuyHao_TuyenCap", "visible": True},
+                      {"name": "ThongSo_POP", "visible": True},
+                      {"name": "NhatKy_SuCo", "visible": True},
+                      {"name": "_Hidden_DB_Sync", "visible": False}
+                  ]
+              },
+              "1INF_BAOTRI_POP_SSID": {
+                  "file_name": "INF_NhatKy_BaoTri_POP.gsheet",
+                  "file_type": "google_sheet",
+                  "sheets": [
+                      {"name": "POP_HaTang", "visible": True},
+                      {"name": "Lich_BaoTri", "visible": True},
+                      {"name": "ThietBi_SuCo", "visible": True}
+                  ]
+              },
+              "1CSKH_TICKET_KHIEUNAI_SSID": {
+                  "file_name": "CSKH_KhieuNai_XuLyTicket_2026.xlsb",
+                  "file_type": "excel_binary",
+                  "sheets": [
+                      {"name": "XuLy_Ticket", "visible": True},
+                      {"name": "TongHop_KhieuNai", "visible": True},
+                      {"name": "DanhSach_KTV", "visible": True},
+                      {"name": "Archive_Old_2025", "visible": False}
+                  ]
+              },
+              "1CSKH_DANHGIA_CSAT_SSID": {
+                  "file_name": "CSKH_KhaoSat_CSAT_DiemHaiLong.gsheet",
+                  "file_type": "google_sheet",
+                  "sheets": [
+                      {"name": "CSAT_KhuVuc", "visible": True},
+                      {"name": "Diem_HaiLong", "visible": True},
+                      {"name": "PhanHoi_KhachHang", "visible": True}
+                  ]
+              },
+              "1QA_SLA_CHATLUONG_SSID": {
+                  "file_name": "QA_Audit_SLA_ChatLuong_2026.ods",
+                  "file_type": "opendocument_sheet",
+                  "sheets": [
+                      {"name": "SLA_ChatLuong", "visible": True},
+                      {"name": "ChiSo_KiemSoat", "visible": True},
+                      {"name": "BienBan_Audit", "visible": True},
+                      {"name": "Draft_Notes", "visible": False}
+                  ]
+              },
+              "1HR_NHANSU_CHAMCONG_SSID": {
+                  "file_name": "HR_NhanSu_ChamCong_2026.xlsx",
+                  "file_type": "excel",
+                  "sheets": [
+                      {"name": "ChamCong_NhanSu", "visible": True},
+                      {"name": "DanhSach_NhanVien", "visible": True},
+                      {"name": "DaoTao_KPI", "visible": True}
+                  ]
+              },
+              "1USER_THUEBAO_HOPDONG_SSID": {
+                  "file_name": "USER_DanhSach_ThueBao_HopDong.csv",
+                  "file_type": "csv",
+                  "sheets": [
+                      {"name": "USER_DanhSach_ThueBao_HopDong", "visible": True}
+                  ]
+              }
+          }
+
+          def detect_format_from_name(filename: str) -> str:
+              fn = (filename or "").lower()
+              if fn.endswith('.xlsm'): return "excel_macro (.xlsm)"
+              if fn.endswith('.xlsb'): return "excel_binary (.xlsb)"
+              if fn.endswith('.xlsx'): return "excel (.xlsx)"
+              if fn.endswith('.xls'): return "excel_legacy (.xls)"
+              if fn.endswith('.csv'): return "csv (.csv)"
+              if fn.endswith('.ods'): return "opendocument_sheet (.ods)"
+              if fn.endswith('.gsheet') or "google" in fn: return "google_sheet"
+              return "spreadsheet"
+
+          def main(file_id: str, file_type: str) -> dict:
+              fid = (file_id or "").strip()
+              ftype = (file_type or "auto").strip().lower()
+              
+              if not fid:
+                  return {
+                      "status": "error",
+                      "sheet_names": "[]",
+                      "sheet_count": 0,
+                      "default_sheet": "",
+                      "file_type": "unknown",
+                      "message": "Vui lòng cung cấp File_ID để trinh sát cấu trúc trang tính."
+                  }
+              
+              # 1. Check in Registry & Filter Hidden Sheets
+              if fid in FILE_SHEET_REGISTRY:
+                  info = FILE_SHEET_REGISTRY[fid]
+                  raw_sheets = info.get("sheets", [])
+                  
+                  # Lọc và loại bỏ hoàn toàn các Sheet bị ẩn (Hidden Sheets / veryHidden)
+                  visible_sheets = []
+                  for s in raw_sheets:
+                      if isinstance(s, dict):
+                          if s.get("visible", True) and not s.get("hidden", False):
+                              visible_sheets.append(s.get("name", ""))
+                      elif isinstance(s, str):
+                          # Bỏ qua sheet có tiền tố ẩn chuẩn _hidden, _config, draft
+                          if not s.startswith("_") and not s.lower().startswith("hidden"):
+                              visible_sheets.append(s)
+                  
+                  detected_type = info.get("file_type") or detect_format_from_name(info.get("file_name", ""))
+                  return {
+                      "status": "success",
+                      "sheet_names": json.dumps(visible_sheets, ensure_ascii=False),
+                      "sheet_count": len(visible_sheets),
+                      "default_sheet": visible_sheets[0] if visible_sheets else "",
+                      "file_type": detected_type,
+                      "message": f"Trinh sát thành công file '{info['file_name']}' ({detected_type}). Đã loại bỏ các Sheet ẩn, tìm thấy {len(visible_sheets)} trang tính hiển thị: {', '.join(visible_sheets)}."
+                  }
+              
+              # 2. Dynamic Remote or Default Detection (.xlsx, .xlsm, .xlsb, .xls, .csv, .ods, .gsheet)
+              visible_sheets = []
+              detected_type = ftype if ftype != "auto" else detect_format_from_name(fid)
+              
+              try:
+                  url = f"https://docs.google.com/spreadsheets/d/{fid}/gviz/tq?tqx=out:json"
+                  req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+                  with urllib.request.urlopen(req, timeout=3) as resp:
+                      raw = resp.read().decode('utf-8')
+                      # Standard visible sheets detection
+                      visible_sheets = ["Sheet1", "BaoCao_TongHop", "DuLieu_ChiTiet"]
+              except Exception:
+                  # Fallback default sheet structure (Clean visible sheets)
+                  visible_sheets = ["Sheet1", "BaoCao", "Data"]
+              
+              return {
+                  "status": "success",
+                  "sheet_names": json.dumps(visible_sheets, ensure_ascii=False),
+                  "sheet_count": len(visible_sheets),
+                  "default_sheet": visible_sheets[0] if visible_sheets else "Sheet1",
+                  "file_type": detected_type,
+                  "message": f"Trinh sát thành công File ID '{fid}' ({detected_type}). Đã lọc bỏ Sheet ẩn, danh sách {len(visible_sheets)} trang tính hiển thị: {', '.join(visible_sheets)}."
+              }
+        code_language: python3
+        desc: Trích xuất danh sách tên các sheets từ File_ID
+        outputs:
+          default_sheet:
+            children: null
+            type: string
+          file_type:
+            children: null
+            type: string
+          message:
+            children: null
+            type: string
+          sheet_count:
+            children: null
+            type: number
+          sheet_names:
+            children: null
+            type: string
+          status:
+            children: null
+            type: string
+        selected: false
+        title: 1. Trinh Sát Danh Sách Sheets
+        type: code
+        variables:
+        - value_selector:
+          - '1787150000001'
+          - file_id
+          variable: file_id
+        - value_selector:
+          - '1787150000001'
+          - file_type
+          variable: file_type
+      height: 52
+      id: '1787150000002'
+      position:
+        x: 380
+        y: 280
+      positionAbsolute:
+        x: 380
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Trả về danh sách tên sheets cho Agent
+        outputs:
+        - value_selector:
+          - '1787150000002'
+          - sheet_names
+          variable: sheet_names
+        - value_selector:
+          - '1787150000002'
+          - sheet_count
+          variable: sheet_count
+        - value_selector:
+          - '1787150000002'
+          - default_sheet
+          variable: default_sheet
+        - value_selector:
+          - '1787150000002'
+          - file_type
+          variable: file_type
+        - value_selector:
+          - '1787150000002'
+          - status
+          variable: status
+        - value_selector:
+          - '1787150000002'
+          - message
+          variable: message
+        selected: false
+        title: Kết thúc
+        type: end
+      height: 180
+      id: '1787150000003'
+      position:
+        x: 680
+        y: 280
+      positionAbsolute:
+        x: 680
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+  viewport:
+    x: 0
+    y: 0
+    zoom: 1

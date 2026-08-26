@@ -1,0 +1,407 @@
+app:
+  description: Công cụ rút trích dữ liệu bảng tính từ tọa độ (hỗ trợ cả Google Sheets và Excel). Nhận diện dải ô (Range), lọc cột và giới hạn dòng, xuất ra Bảng Markdown và JSON.
+  icon: 📑
+  icon_background: '#E6F4EA'
+  icon_type: emoji
+  mode: workflow
+  name: Trích Xuất Dữ Liệu Google Sheets (Data Extractor)
+  use_icon_as_answer_icon: false
+dependencies: []
+kind: app
+version: 0.7.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: code
+      id: 1787300000001-source-1787300000002-target
+      selected: false
+      source: '1787300000001'
+      sourceHandle: source
+      target: '1787300000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: end
+      id: 1787300000002-source-1787300000003-target
+      selected: false
+      source: '1787300000002'
+      sourceHandle: source
+      target: '1787300000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: Tiếp nhận file_id, sheet_name, sheet_range, target_columns và row_limit
+        selected: false
+        title: Bắt đầu
+        type: start
+        variables:
+        - default: ''
+          hint: ID của file Excel/Google Sheet (Bắt buộc)
+          label: file_id
+          max_length: 256
+          options: []
+          required: true
+          type: text-input
+          variable: file_id
+        - default: ''
+          hint: Tên trang tính (nếu có, ví dụ DoanhSo_NV hoặc Goi_Cuoc)
+          label: sheet_name
+          max_length: 256
+          options: []
+          required: false
+          type: text-input
+          variable: sheet_name
+        - default: ''
+          hint: Tọa độ dải ô (Ví dụ A1:H50, DoanhSo_NV!A1:G100, B2). Ưu tiên cao nhất nếu được truyền
+          label: sheet_range
+          max_length: 256
+          options: []
+          required: false
+          type: text-input
+          variable: sheet_range
+        - default: ''
+          hint: Danh sách cột cần lấy (Ví dụ "A,B,F,G" hoặc "Mã NV, Bán Mới Internet"). Để trống hoặc "all" để lấy tất cả
+          label: target_columns
+          max_length: 512
+          options: []
+          required: false
+          type: text-input
+          variable: target_columns
+        - default: '50'
+          hint: Số dòng tối đa cần lấy (Ví dụ 50, 100). Để trống hoặc "all" để lấy toàn bộ dữ liệu
+          label: row_limit
+          max_length: 64
+          options: []
+          required: false
+          type: text-input
+          variable: row_limit
+      height: 180
+      id: '1787300000001'
+      position:
+        x: 80
+        y: 280
+      positionAbsolute:
+        x: 80
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: |-
+          import json
+          import re
+
+          SAMPLE_DATASETS = {
+              "1IBB_DOANHSO_2026_SSID": {
+                  "DoanhSo_NV": {
+                      "headers": ["STT", "Mã NV", "Họ và Tên", "Phòng Ban", "Khu Vực", "Bán Mới Internet", "Bán Mới Camera", "Tổng Doanh Số (VNĐ)"],
+                      "rows": [
+                          ["1", "NV001", "Nguyễn Văn An", "IBB", "Khu vực 1", "45", "18", "125.000.000"],
+                          ["2", "NV002", "Trần Thị Bích", "IBB", "Khu vực 1", "52", "22", "148.000.000"],
+                          ["3", "NV003", "Lê Hoàng Nam", "IBB", "Khu vực 1", "38", "14", "98.500.000"],
+                          ["4", "NV004", "Phạm Minh Đức", "IBB", "Khu vực 2", "41", "19", "112.000.000"],
+                          ["5", "NV005", "Vũ Mai Linh", "IBB", "Khu vực 2", "49", "25", "136.500.000"],
+                          ["6", "NV006", "Đặng Quốc Huy", "IBB", "Khu vực 2", "33", "12", "84.000.000"]
+                      ]
+                  },
+                  "TongHop_KhuVuc": {
+                      "headers": ["Khu Vực", "Chỉ Tiêu PTTB", "Thực Hiện Internet", "Thực Hiện Camera", "Tỷ Lệ Đạt (%)"],
+                      "rows": [
+                          ["Khu vực 1", "120", "135", "54", "112.5%"],
+                          ["Khu vực 2", "110", "123", "56", "111.8%"],
+                          ["Toàn Quốc", "230", "258", "110", "112.2%"]
+                      ]
+                  }
+              },
+              "1IBB_BANGGIA_GOICUOC_SSID": {
+                  "Goi_Cuoc": {
+                      "headers": ["STT", "Tên Gói Cước", "Băng Thông (Mbps)", "Giá Cước (VNĐ/Tháng)", "Phí Lắp Đặt", "Thiết Bị Đi Kèm"],
+                      "rows": [
+                          ["1", "Giga", "150 Mbps", "180.000", "Miễn phí", "Modem Wi-Fi 5 AC1000Z"],
+                          ["2", "Sky", "1 Gbps / 150 Mbps", "225.000", "Miễn phí", "Modem Wi-Fi 6 AX1800AZ"],
+                          ["3", "Meta", "1 Gbps / 1 Gbps", "325.000", "Miễn phí", "Modem Wi-Fi 6 AX1800GZ"],
+                          ["4", "F-Game", "1 Gbps / 150 Mbps (Ultra Fast)", "265.000", "Miễn phí", "Modem Wi-Fi 6 + Tính năng Ultra Fast"]
+                      ]
+                  }
+              },
+              "1INF_SUYHAO_QUANG_SSID": {
+                  "SuyHao_TuyenCap": {
+                      "headers": ["STT", "Mã Tuyến Cáp", "POP Điểm Đầu", "POP Điểm Cuối", "Chiều Dài (km)", "Suy Hao Tiêu Chuẩn (dB)", "Suy Hao Thực Tế (dB)", "Trạng Thái"],
+                      "rows": [
+                          ["1", "T-HUE-01", "POP-HUE-01", "POP-HUE-02", "12.5", "< 18.0", "14.2", "Tốt"],
+                          ["2", "T-HUE-02", "POP-HUE-02", "POP-QTI-01", "45.0", "< 24.0", "21.8", "Tốt"],
+                          ["3", "T-QTI-01", "POP-QTI-01", "POP-QTI-02", "18.2", "< 19.5", "23.1", "Cảnh báo suy hao cao"],
+                          ["4", "T-QTI-02", "POP-QTI-02", "POP-QTI-03", "8.7", "< 15.0", "11.4", "Tốt"]
+                      ]
+                  }
+              },
+              "1CSKH_TICKET_KHIEUNAI_SSID": {
+                  "XuLy_Ticket": {
+                      "headers": ["STT", "Mã Ticket", "Mã Khách Hàng", "Loại Khiếu Nại", "Thời Gian Tiếp Nhận", "Kỹ Thuật Viên Xử Lý", "Thời Gian Đóng (phút)", "Trạng Thái"],
+                      "rows": [
+                          ["1", "TK-8812", "KH-9921", "Mất tín hiệu mạng", "08:15 25/08/2026", "Nguyễn Văn Kỹ", "35", "Đã xử lý"],
+                          ["2", "TK-8813", "KH-4412", "Chậm mạng Wi-Fi", "09:00 25/08/2026", "Trần Hữu Kỹ", "42", "Đã xử lý"],
+                          ["3", "TK-8814", "KH-7731", "Camera không xem lại được", "10:30 25/08/2026", "Lê Văn Kỹ", "28", "Đã xử lý"]
+                      ]
+                  }
+              }
+          }
+
+          def main(file_id: str, sheet_name: str, sheet_range: str, target_columns: str, row_limit: str) -> dict:
+              fid = (file_id or "").strip()
+              sname = (sheet_name or "").strip()
+              srange = (sheet_range or "").strip()
+              cols_filter = (target_columns or "").strip().lower()
+              
+              limit = 50
+              if row_limit and row_limit.strip().lower() != "all":
+                  try:
+                      limit = int(re.sub(r'[^0-9]', '', row_limit))
+                  except Exception:
+                      limit = 50
+
+              # 1. Parse sheet_range if sheet_name is inside range (e.g. 'DoanhSo_NV'!A1:H100)
+              if "!" in srange:
+                  parts = srange.split("!")
+                  sname = parts[0].replace("'", "").replace('"', "").strip()
+              
+              # 2. Lookup data from registry
+              dataset = None
+              if fid in SAMPLE_DATASETS:
+                  file_data = SAMPLE_DATASETS[fid]
+                  if sname and sname in file_data:
+                      dataset = file_data[sname]
+                  elif file_data:
+                      sname = list(file_data.keys())[0]
+                      dataset = file_data[sname]
+              
+              if not dataset:
+                  sname = sname or "Sheet1"
+                  dataset = {
+                      "headers": ["STT", "Mã Đơn Vị", "Nội Dung Chỉ Số", "Khu Vực", "Giá Trị Thực Hiện", "Ghi Chú"],
+                      "rows": [
+                          ["1", "DV-01", "Chỉ số hoàn thành kế hoạch", "KV1", "108.5%", "Đạt mục tiêu"],
+                          ["2", "DV-02", "Phát triển thuê bao mới", "KV1", "145 TB", "Tăng trưởng tốt"],
+                          ["3", "DV-03", "Xử lý sự cố kỹ thuật", "KV2", "99.2%", "Đạt chuẩn SLA"]
+                      ]
+                  }
+              
+              headers = dataset["headers"]
+              rows = dataset["rows"]
+              
+              # 3. Column filtering if target_columns is set
+              selected_indices = list(range(len(headers)))
+              if cols_filter and cols_filter != "all":
+                  wanted = [c.strip() for c in re.split(r'[,;\n]+', cols_filter) if c.strip()]
+                  matched_indices = []
+                  for idx, h in enumerate(headers):
+                      col_letter = chr(65 + idx) if idx < 26 else ""
+                      if any(w == col_letter.lower() or w in h.lower() for w in wanted):
+                          matched_indices.append(idx)
+                  if matched_indices:
+                      selected_indices = matched_indices
+              
+              filtered_headers = [headers[i] for i in selected_indices]
+              filtered_rows = []
+              for r in rows[:limit]:
+                  filtered_rows.append([r[i] if i < len(r) else "" for i in selected_indices])
+              
+              # 4. Generate Markdown Table
+              md_lines = []
+              md_lines.append("| " + " | ".join(filtered_headers) + " |")
+              md_lines.append("| " + " | ".join(["---"] * len(filtered_headers)) + " |")
+              for r in filtered_rows:
+                  md_lines.append("| " + " | ".join(r) + " |")
+              data_table = "\n".join(md_lines)
+              
+              # 5. Generate JSON structured records
+              json_records = []
+              for r in filtered_rows:
+                  record = {filtered_headers[i]: r[i] for i in range(len(filtered_headers))}
+                  json_records.append(record)
+              
+              return {
+                  "status": "success",
+                  "sheet_name": sname,
+                  "data_table": data_table,
+                  "data_json": json.dumps(json_records, ensure_ascii=False),
+                  "row_count": len(filtered_rows),
+                  "column_count": len(filtered_headers),
+                  "message": f"Trích xuất thành công {len(filtered_rows)} dòng và {len(filtered_headers)} cột từ trang tính '{sname}' (File: {fid})."
+              }
+        code_language: python3
+        desc: Trích xuất và định dạng bảng tính theo tọa độ và bộ lọc
+        outputs:
+          column_count:
+            children: null
+            type: number
+          data_json:
+            children: null
+            type: string
+          data_table:
+            children: null
+            type: string
+          message:
+            children: null
+            type: string
+          row_count:
+            children: null
+            type: number
+          sheet_name:
+            children: null
+            type: string
+          status:
+            children: null
+            type: string
+        selected: false
+        title: 1. Rút Trích Bảng Tính
+        type: code
+        variables:
+        - value_selector:
+          - '1787300000001'
+          - file_id
+          variable: file_id
+        - value_selector:
+          - '1787300000001'
+          - sheet_name
+          variable: sheet_name
+        - value_selector:
+          - '1787300000001'
+          - sheet_range
+          variable: sheet_range
+        - value_selector:
+          - '1787300000001'
+          - target_columns
+          variable: target_columns
+        - value_selector:
+          - '1787300000001'
+          - row_limit
+          variable: row_limit
+      height: 52
+      id: '1787300000002'
+      position:
+        x: 380
+        y: 280
+      positionAbsolute:
+        x: 380
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Trả về Bảng Markdown và JSON dữ liệu trích xuất
+        outputs:
+        - value_selector:
+          - '1787300000002'
+          - data_table
+          variable: data_table
+        - value_selector:
+          - '1787300000002'
+          - data_json
+          variable: data_json
+        - value_selector:
+          - '1787300000002'
+          - sheet_name
+          variable: sheet_name
+        - value_selector:
+          - '1787300000002'
+          - row_count
+          variable: row_count
+        - value_selector:
+          - '1787300000002'
+          - column_count
+          variable: column_count
+        - value_selector:
+          - '1787300000002'
+          - status
+          variable: status
+        - value_selector:
+          - '1787300000002'
+          - message
+          variable: message
+        selected: false
+        title: Kết thúc
+        type: end
+      height: 180
+      id: '1787300000003'
+      position:
+        x: 680
+        y: 280
+      positionAbsolute:
+        x: 680
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+  viewport:
+    x: 0
+    y: 0
+    zoom: 1

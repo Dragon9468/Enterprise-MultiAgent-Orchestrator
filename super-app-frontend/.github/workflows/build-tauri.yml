@@ -1,0 +1,63 @@
+name: Build Tauri Desktop App
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-tauri:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [windows-latest, ubuntu-22.04, macos-latest]
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install System Dependencies (Linux)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install Frontend Dependencies
+        run: npm install
+
+      - name: Build Next.js Static Export
+        run: npm run build
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Rust Cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      # =========================================================
+      # TAURI BUILD PLACEHOLDER (Ready for integration)
+      # Uncomment the step below once src-tauri is initialized
+      # =========================================================
+      # - name: Build Tauri App Bundle
+      #   uses: tauri-apps/tauri-action@v0
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tagName: app-v__VERSION__
+      #     releaseName: 'App v__VERSION__'
+      #     releaseBody: 'Automatic Tauri build release'
+      #     releaseDraft: true
+      #     prerelease: false

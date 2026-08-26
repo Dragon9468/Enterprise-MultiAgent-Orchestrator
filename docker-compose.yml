@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  # PocketBase - Embedded SQLite Auth & RBAC Gateway
+  pocketbase:
+    image: ghcr.io/muchobien/pocketbase:latest
+    container_name: pb_auth_gateway
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    volumes:
+      - ./pocketbase/pb_migrations:/pb/pb_migrations
+      - ./pocketbase/pb_hooks:/pb/pb_hooks
+      - ./pocketbase/pb_public:/pb/pb_public
+      - pb_data:/pb/pb_data
+
+  # Ollama - Local LLM Engine (Optional for offline inference)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama_server
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+
+volumes:
+  pb_data:
+  ollama_models:

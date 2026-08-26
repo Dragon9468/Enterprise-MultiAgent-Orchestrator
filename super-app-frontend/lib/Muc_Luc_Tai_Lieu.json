@@ -1,0 +1,340 @@
+{
+  "title": "Enterprise AI - Ma Trận Phân Quyền & Mục Lục Tài Liệu Google Drive (3 Biến)",
+  "version": "3.0.0",
+  "last_updated": "2026-08-24",
+  "key_format": "LV{role_level}_DEPT_{department}_ID_{department_id}",
+  "description": "Bảng ma trận định vị folder_id và keyword tra cứu file Google Drive/Sheets dựa theo 3 biến: role_level (1-5), department (IBB, USER, INF, CSKH, QA, HR), và department_id (1, 2, 3, ALL)",
+  "departments_info": {
+    "IBB": {
+      "name_vi": "Internet Băng Rộng (IBB / Kinh doanh)",
+      "aliases": ["ibb", "kinh doanh", "sales", "goi cuoc", "doanh so", "pttb"]
+    },
+    "USER": {
+      "name_vi": "Người dùng cuối & Thuê bao (USER)",
+      "aliases": ["user", "khach hang", "thue bao", "hop dong", "cuoc"]
+    },
+    "INF": {
+      "name_vi": "Hạ tầng & Kỹ thuật mạng (INF / Infrastructure)",
+      "aliases": ["inf", "ha tang", "ky thuat", "pop", "suy hao", "quang", "tram", "tuyen cap"]
+    },
+    "CSKH": {
+      "name_vi": "Chăm sóc Khách hàng (CSKH)",
+      "aliases": ["cskh", "cham soc khach hang", "khieu nai", "ticket", "dvk"]
+    },
+    "QA": {
+      "name_vi": "Quản lý Chất lượng (QA / Quality Assurance)",
+      "aliases": ["qa", "chat luong", "kiem soat", "sla", "danh gia", "tieu chuan"]
+    },
+    "HR": {
+      "name_vi": "Quản trị Nhân sự (HR / Human Resources)",
+      "aliases": ["hr", "nhan su", "nhan vien", "cham cong", "luong", "dao tao"]
+    }
+  },
+  "catalog": {
+    "LV1_DEPT_IBB_ID1": {
+      "role_level": 1,
+      "department": "IBB",
+      "department_id": "1",
+      "folder_id": "1IBB_STAFF_KV1_FOLDER",
+      "description": "Nhân viên kinh doanh IBB - Khu vực 1 (Bảng giá, KPI cá nhân, Phát triển mới)",
+      "topics": [
+        {
+          "topic_name": "Bảng giá & Gói cước IBB",
+          "keywords": ["BANG_GIA", "GOI_CUOC", "GIGA", "SKY", "META", "F_GAME"],
+          "default_sheet_range": "Goi_Cuoc!A1:F50"
+        },
+        {
+          "topic_name": "KPI Doanh số Cá nhân",
+          "keywords": ["DOANH_SO", "HOA_HONG", "KPI_SALES", "PTTB_CA_NHAN"],
+          "default_sheet_range": "DoanhSo_NV!A1:H100"
+        }
+      ]
+    },
+    "LV1_DEPT_IBB_ID2": {
+      "role_level": 1,
+      "department": "IBB",
+      "department_id": "2",
+      "folder_id": "1IBB_STAFF_KV2_FOLDER",
+      "description": "Nhân viên kinh doanh IBB - Khu vực 2 (Bảng giá, KPI cá nhân)",
+      "topics": [
+        {
+          "topic_name": "Bảng giá & Gói cước IBB KV2",
+          "keywords": ["BANG_GIA", "GOI_CUOC", "GIGA", "SKY", "META"],
+          "default_sheet_range": "Goi_Cuoc!A1:F50"
+        },
+        {
+          "topic_name": "KPI Doanh số Cá nhân KV2",
+          "keywords": ["DOANH_SO", "HOA_HONG", "KPI_SALES", "PTTB"],
+          "default_sheet_range": "DoanhSo_NV!A1:H100"
+        }
+      ]
+    },
+    "LV2_DEPT_IBB_ID1": {
+      "role_level": 2,
+      "department": "IBB",
+      "department_id": "1",
+      "folder_id": "2IBB_SENIOR_KV1_FOLDER",
+      "description": "Chuyên viên kinh doanh IBB KV1 (Báo cáo chỉ tiêu, Target chuyên sâu)",
+      "topics": [
+        {
+          "topic_name": "Báo cáo Target & Doanh số Chuyên sâu",
+          "keywords": ["TARGET_SALES", "DOANH_THU_CHUYEN_SAU", "CHUYEN_DOI"],
+          "default_sheet_range": "Target!A1:G100"
+        }
+      ]
+    },
+    "LV3_DEPT_IBB_ID1": {
+      "role_level": 3,
+      "department": "IBB",
+      "department_id": "1",
+      "folder_id": "3IBB_LEAD_KV1_FOLDER",
+      "description": "Trưởng nhóm kinh doanh IBB KV1 (Hiệu suất đội nhóm, Phân bổ chỉ tiêu)",
+      "topics": [
+        {
+          "topic_name": "Hiệu suất Đội nhóm IBB KV1",
+          "keywords": ["HIEU_SUAT_DOI_NHOM", "KPI_TEAM", "TIEN_DO_PTTB"],
+          "default_sheet_range": "TeamKPI!A1:Z100"
+        }
+      ]
+    },
+    "LV4_DEPT_IBB_ID1": {
+      "role_level": 4,
+      "department": "IBB",
+      "department_id": "1",
+      "folder_id": "ID_FOLDER_IBB1",
+      "description": "Trưởng phòng Kinh doanh IBB KV1 (Doanh thu tổng, Chiến dịch bán hàng)",
+      "topics": [
+        {
+          "topic_name": "Doanh thu Tổng hợp Chi nhánh IBB KV1",
+          "keywords": ["DOANH_THU_CHI_NHANH", "CHI_TIEU_SALES_THANG", "CHIEN_DICH_IBB"],
+          "default_sheet_range": "A1:Z100"
+        },
+        {
+          "topic_name": "Báo cáo PTTB & Rời mạng Net IBB",
+          "keywords": ["PTTB_NET", "TY_LE_ROI_MANG_IBB", "DOANH_SO_TONG"],
+          "default_sheet_range": "BaoCao_Net!A1:Z200"
+        }
+      ]
+    },
+    "LV5_DEPT_IBB_IDALL": {
+      "role_level": 5,
+      "department": "IBB",
+      "department_id": "ALL",
+      "folder_id": "5IBB_DIRECTOR_ALL_FOLDER",
+      "description": "Ban Giám đốc - Khối IBB Toàn quốc/Chi nhánh",
+      "topics": [
+        {
+          "topic_name": "Báo cáo Hợp nhất Doanh thu IBB",
+          "keywords": ["HOP_NHAT_IBB", "TONG_QUAN_DOANH_THU", "SO_SANH_CHI_NHANH"],
+          "default_sheet_range": "A1:Z200"
+        }
+      ]
+    },
+    "LV1_DEPT_USER_ID1": {
+      "role_level": 1,
+      "department": "USER",
+      "department_id": "1",
+      "folder_id": "1USER_STAFF_KV1_FOLDER",
+      "description": "Nhân viên Quản lý Thuê bao / Hợp đồng User KV1",
+      "topics": [
+        {
+          "topic_name": "Danh sách Thuê bao & Hợp đồng",
+          "keywords": ["HOP_DONG", "THUE_BAO", "CUOC", "KHACH_HANG"],
+          "default_sheet_range": "Danh_Sach_HD!A1:H100"
+        }
+      ]
+    },
+    "LV3_DEPT_USER_ID2": {
+      "role_level": 3,
+      "department": "USER",
+      "department_id": "2",
+      "folder_id": "ID_FOLDER_USER2",
+      "description": "Trưởng nhóm Quản trị User KV2 (Báo cáo hoạt động thuê bao, Phân tích nhóm khách hàng)",
+      "topics": [
+        {
+          "topic_name": "Phân tích Nhóm Khách hàng & Hành vi User KV2",
+          "keywords": ["HANH_VI_USER", "NHOM_KHACH_HANG", "BIEN_DONG_THUE_BAO"],
+          "default_sheet_range": "UserAnalytics!A1:Z100"
+        }
+      ]
+    },
+    "LV4_DEPT_USER_ID1": {
+      "role_level": 4,
+      "department": "USER",
+      "department_id": "1",
+      "folder_id": "4USER_DEPT_HEAD_FOLDER",
+      "description": "Trưởng phòng Quản trị Dữ liệu User (Báo cáo Retention & Churn Rate)",
+      "topics": [
+        {
+          "topic_name": "Báo cáo Rời mạng & Giữ chân Thuê bao User",
+          "keywords": ["CHURN_RATE", "RETENTION_RATE", "ROI_MANG_USER"],
+          "default_sheet_range": "Retention!A1:Z100"
+        }
+      ]
+    },
+    "LV1_DEPT_INF_ID1": {
+      "role_level": 1,
+      "department": "INF",
+      "department_id": "1",
+      "folder_id": "1INF_STAFF_KV1_FOLDER",
+      "description": "Kỹ thuật viên Hiện trường INF KV1 (Chỉ số suy hao, Đo kiểm tuyến cáp)",
+      "topics": [
+        {
+          "topic_name": "Đo kiểm Suy hao Quang & POP KV1",
+          "keywords": ["SUY_HAO", "OPTICAL", "RX_POWER", "CANH_BAO_POP"],
+          "default_sheet_range": "BaoCao_SuyHao!A1:F100"
+        },
+        {
+          "topic_name": "Vật tư Thiết bị POP & Cáp",
+          "keywords": ["VAT_TU_POP", "CAP_QUANG", "ODF", "SPLITTER", "MODEM"],
+          "default_sheet_range": "TonKho_INF!A1:E200"
+        }
+      ]
+    },
+    "LV3_DEPT_INF_ID1": {
+      "role_level": 3,
+      "department": "INF",
+      "department_id": "1",
+      "folder_id": "3INF_LEAD_KV1_FOLDER",
+      "description": "Trưởng nhóm Kỹ thuật Hạ tầng INF KV1 (Điểm nóng sự cố, Lịch bảo trì)",
+      "topics": [
+        {
+          "topic_name": "Điểm nóng Sự cố Hạ tầng KV1",
+          "keywords": ["DIEM_NONG_HA_TANG", "SU_CO_TRUC", "DUT_CAP", "BAO_TRI_POP"],
+          "default_sheet_range": "DiemNong!A1:Z100"
+        }
+      ]
+    },
+    "LV4_DEPT_INF_ID1": {
+      "role_level": 4,
+      "department": "INF",
+      "department_id": "1",
+      "folder_id": "4INF_DEPT_HEAD_FOLDER",
+      "description": "Trưởng phòng Hạ tầng & Kỹ thuật Mạng INF",
+      "topics": [
+        {
+          "topic_name": "Báo cáo Tổng thể Độ sẵn sàng Mạng lưới INF",
+          "keywords": ["DO_SAN_SANG_MANG", "UPTIME_POP", "QUY_HOACH_HA_TANG"],
+          "default_sheet_range": "A1:Z200"
+        }
+      ]
+    },
+    "LV1_DEPT_CSKH_ID1": {
+      "role_level": 1,
+      "department": "CSKH",
+      "department_id": "1",
+      "folder_id": "1CSKH_STAFF_KV1_FOLDER",
+      "description": "Điện thoại viên / Giao dịch viên CSKH KV1 (Ticket khiếu nại, Tiếp nhận yêu cầu)",
+      "topics": [
+        {
+          "topic_name": "Ticket Khiếu nại & Xử lý CSKH",
+          "keywords": ["KHIEU_NAI", "TICKET", "SU_CO_CSKH", "YEU_CAU_HO_TRO"],
+          "default_sheet_range": "Khieu_Nai_Ton!A1:G100"
+        }
+      ]
+    },
+    "LV3_DEPT_CSKH_ID1": {
+      "role_level": 3,
+      "department": "CSKH",
+      "department_id": "1",
+      "folder_id": "3CSKH_LEAD_KV1_FOLDER",
+      "description": "Trưởng nhóm CSKH KV1 (Chỉ số SLA, CSAT, Năng suất trực tổng đài)",
+      "topics": [
+        {
+          "topic_name": "Báo cáo SLA & Đánh giá Hài lòng CSAT",
+          "keywords": ["BAO_CAO_SLA", "CSAT_SCORE", "NANG_SUAT_TONG_DAI"],
+          "default_sheet_range": "SLA_CSAT!A1:Z100"
+        }
+      ]
+    },
+    "LV4_DEPT_CSKH_ID1": {
+      "role_level": 4,
+      "department": "CSKH",
+      "department_id": "1",
+      "folder_id": "4CSKH_DEPT_HEAD_FOLDER",
+      "description": "Trưởng phòng Chăm sóc Khách hàng (Báo cáo chất lượng DVKH toàn diện)",
+      "topics": [
+        {
+          "topic_name": "Tổng hợp Khiếu nại & Chất lượng DVKH Toàn diện",
+          "keywords": ["TONG_HOP_KHIEU_NAI", "CHAT_LUONG_DVKH", "FCR_RATE"],
+          "default_sheet_range": "A1:Z100"
+        }
+      ]
+    },
+    "LV1_DEPT_QA_ID1": {
+      "role_level": 1,
+      "department": "QA",
+      "department_id": "1",
+      "folder_id": "1QA_STAFF_KV1_FOLDER",
+      "description": "Chuyên viên Giám sát Chất lượng QA KV1 (Biên bản kiểm tra, Checklist tuân thủ)",
+      "topics": [
+        {
+          "topic_name": "Biên bản Kiểm tra Chất lượng & Tuân thủ",
+          "keywords": ["BIEN_BAN_QA", "CHECKLIST_TUAN_THU", "LOI_QUY_TRINH"],
+          "default_sheet_range": "KiemTra_QA!A1:G100"
+        }
+      ]
+    },
+    "LV4_DEPT_QA_ID1": {
+      "role_level": 4,
+      "department": "QA",
+      "department_id": "1",
+      "folder_id": "4QA_DEPT_HEAD_FOLDER",
+      "description": "Trưởng phòng Quản lý Chất lượng QA (Báo cáo chỉ số lỗi & Xếp hạng chuẩn quy trình)",
+      "topics": [
+        {
+          "topic_name": "Báo cáo Chỉ số Lỗi & Đánh giá Tuân thủ Quy trình",
+          "keywords": ["CHI_SO_LOI_QA", "DANH_GIA_TUAN_THU", "XEP_HANG_CHAT_LUONG"],
+          "default_sheet_range": "A1:Z100"
+        }
+      ]
+    },
+    "LV1_DEPT_HR_ID1": {
+      "role_level": 1,
+      "department": "HR",
+      "department_id": "1",
+      "folder_id": "1HR_STAFF_KV1_FOLDER",
+      "description": "Chuyên viên Nhân sự HR KV1 (Chấm công, Hồ sơ nhân viên)",
+      "topics": [
+        {
+          "topic_name": "Bảng Chấm công & Danh sách Nhân sự",
+          "keywords": ["CHAM_CONG", "DANH_SACH_NV", "HO_SO_NHAN_SU"],
+          "default_sheet_range": "ChamCong!A1:H100"
+        }
+      ]
+    },
+    "LV4_DEPT_HR_ID1": {
+      "role_level": 4,
+      "department": "HR",
+      "department_id": "1",
+      "folder_id": "4HR_DEPT_HEAD_FOLDER",
+      "description": "Trưởng phòng Quản trị Nhân sự HR (Báo cáo biến động nhân sự, Quỹ lương, Đào tạo)",
+      "topics": [
+        {
+          "topic_name": "Báo cáo Biến động Nhân sự & Năng suất Lao động",
+          "keywords": ["BIEN_DONG_NHAN_SU", "NANG_SUAT_LAO_DONG", "DAO_TAO_KPI"],
+          "default_sheet_range": "A1:Z100"
+        }
+      ]
+    },
+    "LV5_DEPT_ALL_IDALL": {
+      "role_level": 5,
+      "department": "ALL",
+      "department_id": "ALL",
+      "folder_id": "5MGMT_BRANCH_REPORTS",
+      "description": "Ban Giám đốc & Hội đồng Quản trị (Báo cáo hợp nhất toàn chi nhánh)",
+      "topics": [
+        {
+          "topic_name": "Báo cáo Hợp nhất Toàn diện Chi nhánh",
+          "keywords": ["BAO_CAO_CHI_NHANH", "TONG_QUAN_CHI_NHANH", "HOP_NHAT"],
+          "default_sheet_range": "Tong_Hop_KPI!A1:H100"
+        },
+        {
+          "topic_name": "So sánh Hiệu suất Đa Phòng ban",
+          "keywords": ["SO_SANH_KHU_VUC", "XEP_HANG_KV", "DIEM_CHAT_LUONG"],
+          "default_sheet_range": "Xep_Hang_KV!A1:G50"
+        }
+      ]
+    }
+  }
+}

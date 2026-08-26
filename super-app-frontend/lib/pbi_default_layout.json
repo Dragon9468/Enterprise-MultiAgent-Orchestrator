@@ -1,0 +1,170 @@
+{
+  "reportPage": "Tổng Hợp",
+  "canvasWidth": 1634,
+  "canvasHeight": 817,
+  "visualContainers": [
+    {
+      "id": "widget-khu-vuc",
+      "name": "Thành Phần Lương",
+      "x": 652,
+      "y": 0,
+      "width": 490,
+      "height": 147,
+      "zIndex": 1001
+    },
+    {
+      "id": "widget-tay-nghe",
+      "name": "Chất Lượng Tay Nghề",
+      "x": 0,
+      "y": 2,
+      "width": 297,
+      "height": 462,
+      "zIndex": 1003
+    },
+    {
+      "id": "widget-khu-vuc",
+      "name": "Chỉ Số Khu Vực",
+      "x": 297,
+      "y": 2,
+      "width": 342,
+      "height": 461,
+      "zIndex": 1005
+    },
+    {
+      "id": "widget-12",
+      "name": "Clear selections",
+      "x": 1160,
+      "y": 67,
+      "width": 172,
+      "height": 61,
+      "zIndex": 1011
+    },
+    {
+      "id": "widget-14",
+      "name": "Clear selections",
+      "x": 1349,
+      "y": 68,
+      "width": 270,
+      "height": 62,
+      "zIndex": 1013
+    },
+    {
+      "id": "widget-suy-hao",
+      "name": "CSAT 1,2",
+      "x": 1350,
+      "y": 135,
+      "width": 268,
+      "height": 328,
+      "zIndex": 1017
+    },
+    {
+      "id": "widget-20",
+      "name": "Can be sorted",
+      "x": 639,
+      "y": 147,
+      "width": 380,
+      "height": 253,
+      "zIndex": 1019
+    },
+    {
+      "id": "widget-22",
+      "name": "Tỷ Lệ Lặp",
+      "x": 1023,
+      "y": 147,
+      "width": 327,
+      "height": 171,
+      "zIndex": 1021
+    },
+    {
+      "id": "widget-24",
+      "name": "Thiết Bị Cho Mượn",
+      "x": 1017,
+      "y": 317,
+      "width": 322,
+      "height": 85,
+      "zIndex": 1023
+    },
+    {
+      "id": "widget-26",
+      "name": "Can be sorted",
+      "x": 790,
+      "y": 400,
+      "width": 542,
+      "height": 417,
+      "zIndex": 1025
+    },
+    {
+      "id": "widget-28",
+      "name": "hơn 2 ngày\n41\nsố lượng",
+      "x": 639,
+      "y": 402,
+      "width": 135,
+      "height": 415,
+      "zIndex": 1027
+    },
+    {
+      "id": "widget-30",
+      "name": "yêu cầu hủy hôm qua 6.",
+      "x": 1337,
+      "y": 464,
+      "width": 282,
+      "height": 75,
+      "zIndex": 1029
+    },
+    {
+      "id": "widget-ha-tang",
+      "name": "Chất Lượng Hạ Tầng",
+      "x": 297,
+      "y": 490,
+      "width": 342,
+      "height": 328,
+      "zIndex": 1031
+    },
+    {
+      "id": "widget-34",
+      "name": "SHD by Nguyên nhân RM",
+      "x": 0,
+      "y": 490,
+      "width": 297,
+      "height": 327,
+      "zIndex": 1033
+    },
+    {
+      "id": "widget-36",
+      "name": "Lặp 2 ngày qua 21.",
+      "x": 1339,
+      "y": 554,
+      "width": 280,
+      "height": 71,
+      "zIndex": 1035
+    },
+    {
+      "id": "widget-38",
+      "name": "Time TK-BT",
+      "x": 1332,
+      "y": 637,
+      "width": 302,
+      "height": 180,
+      "zIndex": 1037
+    },
+    {
+      "id": "widget-40",
+      "name": "XẾP HẠNG",
+      "x": 1499,
+      "y": 749,
+      "width": 135,
+      "height": 68,
+      "zIndex": 1039
+    },
+    {
+      "id": "widget-42",
+      "name": "AU ĐIỀU\nCHỈNH",
+      "x": 1381,
+      "y": 760,
+      "width": 103,
+      "height": 57,
+      "zIndex": 1041
+    }
+  ],
+  "extractedAt": "2026-08-19T07:38:39.557567+00:00"
+}

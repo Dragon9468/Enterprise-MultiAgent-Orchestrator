@@ -1,0 +1,192 @@
+app:
+  description: Agent Chuyên trách Truy xuất Dữ liệu Google Sheets và Tài liệu Google
+    Drive theo Ma trận Phân quyền 3 Biến (role_level, department, department_id) vận
+    hành băng chuyền 3 Tool (Locate -> Scan -> Extract).
+  icon: 🤖
+  icon_background: '#D5D9EB'
+  icon_type: emoji
+  mode: agent
+  name: Agent Truy xuất GG Sheet + Doc
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.7.0
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.9.4@9127fda25bd652152a418514dd05c2e88e17883fbf625650f2a8ba2808adf8b9
+    version: null
+agent:
+  package_ref: agent_1
+agent_packages:
+  agent_1:
+    metadata:
+      description: Agent Truy xuất dữ liệu Google Drive & Sheets điều phối 3 Tool
+        theo Skill và Ma trận Mục lục.
+      icon: 🤖
+      icon_background: '#D5D9EB'
+      icon_type: emoji
+      name: Agent Truy xuất GG Sheet + Doc
+      role: Data Retrieval & Sheet Extraction Specialist
+    omitted_assets: []
+    schema_version: 1
+    soul:
+      app_features:
+        file_upload:
+          allowed_file_extensions:
+          - JPG
+          - JPEG
+          - PNG
+          - GIF
+          - WEBP
+          - SVG
+          allowed_file_types:
+          - document
+          - image
+          - audio
+          - video
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          enabled: true
+          image:
+            enabled: true
+          number_limits: 3
+        opening_statement: null
+        retriever_resource: null
+        sensitive_word_avoidance: null
+        speech_to_text: null
+        suggested_questions: null
+        suggested_questions_after_answer: null
+        text_to_speech: null
+      app_variables:
+      - default: ''
+        description: Mã nhân viên
+        name: emp_id
+        required: false
+        type: string
+        value_enum: []
+      - default: '1'
+        description: 'Cấp bậc người dùng (1: NV, 2: Chuyên viên, 3: Trưởng nhóm, 4: Trưởng phòng, 5: Ban Giám Đốc)'
+        name: role_level
+        required: false
+        type: string
+        value_enum: []
+      - default: IBB
+        description: Phòng ban (IBB, USER, INF, CSKH, QA, HR)
+        name: department
+        required: false
+        type: string
+        value_enum: []
+      - default: '1'
+        description: ID phòng ban / khu vực (1, 2, 3, ALL)
+        name: department_id
+        required: false
+        type: string
+        value_enum: []
+      config_files:
+      - file_kind: upload_file
+        is_missing: true
+        name: Muc_Luc_Tai_Lieu.json
+      config_note: ''
+      config_skills: []
+      env:
+        secret_refs: []
+        variables:
+        - name: ROOT_STORAGE_URL
+          value: https://drive.google.com/drive/folders/YOUR_ROOT_STORAGE_FOLDER_ID
+      files:
+        files: []
+        skills: []
+      human:
+        contacts: []
+        tools: []
+      knowledge:
+        sets: []
+      memory:
+        artifacts: []
+        budget: null
+        scope: null
+      misc_legacy: {}
+      model:
+        credential_ref: null
+        model: gemini-3.6-flash
+        model_provider: langgenius/gemini/google
+        model_settings:
+          frequency_penalty: null
+          max_tokens: null
+          presence_penalty: null
+          response_format: null
+          stop: null
+          temperature: null
+          top_p: null
+        plugin_id: langgenius/gemini
+      prompt:
+        system_prompt: "Bạn là Đặc vụ Truy xuất Dữ liệu. Hãy sử dụng Quy trình Vận hành Chuẩn (SOP) được định nghĩa trong gói kỹ năng (Skill) của bạn để thực hiện chính xác 4 bước lấy dữ liệu từ Google Drive/Sheets."
+      sandbox:
+        config:
+          cpu: null
+          env: []
+          image: null
+          working_dir: null
+        provider: null
+      schema_version: 1
+      tools:
+        cli_tools: []
+        dify_tools:
+        - credential_ref: null
+          credential_type: unauthorized
+          description: Tool 1 - Quét Mục lục và tìm kiếm file trong thư mục Root Storage theo phòng ban và từ khóa
+          enabled: true
+          name: Locate_File_In_Drive_Folder
+          plugin_id: null
+          provider: Tìm Kiếm File Trên Google Drive
+          provider_id: d8e7fae0-ccbe-440c-98a2-576f980bd0fe
+          provider_type: workflow
+          runtime_parameters: {}
+          tool_name: Locate_File_In_Drive_Folder
+        - credential_ref: null
+          credential_type: unauthorized
+          description: Tool 2 - Trinh sát cấu trúc file và CHỈ trả về danh sách tên các Trang (Sheets) có trong file (hỗ trợ cả Google Sheet & Excel)
+          enabled: true
+          name: Inspect_Sheet_Structure_Tool
+          plugin_id: null
+          provider: Trinh Sát Cấu Trúc Trang Tính
+          provider_id: 7a12ef00-c65c-4243-92bd-e0c5e88e9a02
+          provider_type: workflow
+          runtime_parameters: {}
+          tool_name: Inspect_Sheet_Structure_Tool
+        - credential_ref: null
+          credential_type: unauthorized
+          description: Tool 3 - Quét dòng tiêu đề Header của Sheet để định vị chính xác tọa độ dải ô và ánh xạ cột A, B, C...
+          enabled: true
+          name: Scan_Sheet_Schema
+          plugin_id: null
+          provider: Quét Cấu Trúc Bảng Tính (Schema Scanner)
+          provider_id: 890bd361-6e69-4404-b509-78f21bb7bc74
+          provider_type: workflow
+          runtime_parameters: {}
+          tool_name: Scan_Sheet_Schema
+        - credential_ref: null
+          credential_type: unauthorized
+          description: Tool 4 - Rút trích dữ liệu bảng tính từ tọa độ đã lọc (hỗ trợ cả Google Sheets và Excel)
+          enabled: true
+          name: GG_Sheet_Tool
+          plugin_id: null
+          provider: Trích Xuất Dữ Liệu Google Sheets (Data Extractor)
+          provider_id: 2034fc04-28a2-4f65-9365-1ca56eac41d1
+          provider_type: workflow
+          runtime_parameters: {}
+          tool_name: GG_Sheet_Tool
+        - credential_ref: null
+          credential_type: unauthorized
+          description: A tool for getting the current time.
+          enabled: true
+          name: current_time
+          plugin_id: null
+          provider: time
+          provider_id: time
+          provider_type: builtin
+          runtime_parameters: {}
+          tool_name: current_time
+

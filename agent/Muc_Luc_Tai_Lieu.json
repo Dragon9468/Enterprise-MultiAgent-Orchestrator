@@ -1,0 +1,86 @@
+{
+  "title": "Enterprise Multi-Agent Platform - Hierarchical Google Drive Folder Tree",
+  "version": "4.0.0",
+  "last_updated": "2026-08-26",
+  "description": "Hierarchical 4-level tree schema mapping Google Drive folders for enterprise multi-agent file routing",
+  "folder_tree": {
+    "name": "Storage",
+    "folder_id": "YOUR_ROOT_STORAGE_FOLDER_ID",
+    "description": "Root Storage folder",
+    "children": {
+      "Technical": {
+        "name": "Technical & Engineering",
+        "folder_id": "YOUR_TECH_FOLDER_ID",
+        "description": "Engineering & Technology Division",
+        "aliases": ["technical", "tech", "engineering", "it", "ky_thuat"],
+        "children": {
+          "Infrastructure": {
+            "name": "Infrastructure (INF)",
+            "folder_id": "YOUR_INF_FOLDER_ID",
+            "description": "Telecommunications Infrastructure & Network Operations",
+            "aliases": ["inf", "infrastructure", "network", "pop", "ha_tang"],
+            "children": {}
+          },
+          "User_End": {
+            "name": "End-User Engineering (USER)",
+            "folder_id": "YOUR_USER_FOLDER_ID",
+            "description": "Subscriber & End-user technical support",
+            "aliases": ["user", "subscriber", "customer_tech", "ky_thuat_user"],
+            "children": {
+              "Region_1": {
+                "name": "Region 1",
+                "folder_id": "YOUR_REGION_1_FOLDER_ID",
+                "aliases": ["region 1", "kv1", "khu vuc 1"]
+              },
+              "Region_2": {
+                "name": "Region 2",
+                "folder_id": "YOUR_REGION_2_FOLDER_ID",
+                "aliases": ["region 2", "kv2", "khu vuc 2"]
+              },
+              "Region_3": {
+                "name": "Region 3",
+                "folder_id": "YOUR_REGION_3_FOLDER_ID",
+                "aliases": ["region 3", "kv3", "khu vuc 3"]
+              },
+              "Region_4": {
+                "name": "Region 4",
+                "folder_id": "YOUR_REGION_4_FOLDER_ID",
+                "aliases": ["region 4", "kv4", "khu vuc 4"]
+              }
+            }
+          }
+        }
+      },
+      "Customer_Service": {
+        "name": "Customer Support (CSKH)",
+        "folder_id": "YOUR_CSKH_FOLDER_ID",
+        "description": "Customer care, tickets, and SLA monitoring",
+        "aliases": ["cskh", "support", "customer_service", "cham_soc_khach_hang"],
+        "children": {}
+      },
+      "Sales_Business": {
+        "name": "Business & Sales (IBB)",
+        "folder_id": "YOUR_SALES_FOLDER_ID",
+        "description": "Business development & sales units",
+        "aliases": ["sales", "business", "kinh_doanh", "ibb"],
+        "children": {
+          "Sales_Unit_1": {
+            "name": "Sales Unit 1",
+            "folder_id": "YOUR_IBB1_FOLDER_ID",
+            "aliases": ["ibb1", "sales 1", "don vi 1"]
+          },
+          "Sales_Unit_2": {
+            "name": "Sales Unit 2",
+            "folder_id": "YOUR_IBB2_FOLDER_ID",
+            "aliases": ["ibb2", "sales 2", "don vi 2"]
+          },
+          "Sales_Unit_3": {
+            "name": "Sales Unit 3",
+            "folder_id": "YOUR_IBB3_FOLDER_ID",
+            "aliases": ["ibb3", "sales 3", "don vi 3"]
+          }
+        }
+      }
+    }
+  }
+}

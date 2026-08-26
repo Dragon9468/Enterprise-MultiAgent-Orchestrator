@@ -1,0 +1,53 @@
+name: Build Capacitor Mobile App
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-mobile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Frontend Dependencies
+        run: npm install
+
+      - name: Build Next.js Static Export
+        run: npm run build
+
+      - name: Setup Java JDK & Android SDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
+      # =========================================================
+      # CAPACITOR BUILD PLACEHOLDER (Ready for integration)
+      # Uncomment steps below once Capacitor is initialized
+      # =========================================================
+      # - name: Sync Capacitor Native Projects
+      #   run: |
+      #     npx cap sync
+      #
+      # - name: Build Android APK (Debug / Release)
+      #   run: |
+      #     cd android
+      #     chmod +x ./gradlew
+      #     ./gradlew assembleDebug
+      #
+      # - name: Upload Android APK Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: android-debug-apk
+      #     path: android/app/build/outputs/apk/debug/app-debug.apk

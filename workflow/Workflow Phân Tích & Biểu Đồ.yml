@@ -1,0 +1,216 @@
+app:
+  description: Workflow trung gian bọc Standalone Agent Phân tích CV thành Tool cho
+    Master Chatflow
+  icon: 📈
+  icon_background: '#D5D9EB'
+  icon_type: null
+  mode: workflow
+  name: Workflow Phân Tích CV
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.9.4@9127fda25bd652152a418514dd05c2e88e17883fbf625650f2a8ba2808adf8b9
+    version: null
+kind: app
+version: 0.7.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features: {}
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: llm
+      id: 1787060000001-source-1787060000002-target
+      selected: false
+      source: '1787060000001'
+      sourceHandle: source
+      target: '1787060000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: end
+      id: 1787060000002-source-1787060000003-target
+      selected: false
+      source: '1787060000002'
+      sourceHandle: source
+      target: '1787060000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: Nhận các tham số truy vấn và phân quyền 3 biến
+        selected: false
+        title: Bắt đầu
+        type: start
+        variables:
+        - default: ''
+          label: query
+          options: []
+          required: true
+          type: text-input
+          variable: query
+        - default: '1'
+          label: role_level
+          options: []
+          required: false
+          type: text-input
+          variable: role_level
+        - default: IBB
+          label: department
+          options: []
+          required: false
+          type: text-input
+          variable: department
+        - default: '1'
+          label: department_id
+          options: []
+          required: false
+          type: text-input
+          variable: department_id
+        - default: anonymous
+          label: emp_id
+          options: []
+          required: false
+          type: text-input
+          variable: emp_id
+      height: 257
+      id: '1787060000001'
+      position:
+        x: 80
+        y: 280
+      positionAbsolute:
+        x: 80
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+        desc: Thực hiện nhận thức thời gian, phân quyền RBAC và phân tích KPI
+        memory: null
+        model:
+          completion_params:
+            max_tokens: 4096
+            temperature: 0.2
+            top_p: 0.95
+          mode: chat
+          name: gemini-3.6-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: b16c6fa8-5989-489e-9bcb-2614b5d09f95
+          role: system
+          text: "Bạn là \"Agent Phân tích CV\" - Chuyên gia Đánh giá Chỉ số Công việc\
+            \ & Báo cáo Hiệu suất Doanh nghiệp.\nNhiệm vụ của bạn là tiếp nhận yêu cầu, nhận\
+            \ thức thời gian, phân quyền dữ liệu nghiêm ngặt, gọi tool truy xuất dữ\
+            \ liệu từ Google Sheets / Doc, tổng hợp số liệu và vẽ biểu đồ trực quan.\n\
+            \n=== NGUYÊN TẮC HOẠT ĐỘNG CỐT LÕI (THIẾT GIÁP) ===\n\n1. NHẬN THỨC THỜI\
+            \ GIAN (TIME AWARENESS):\n   - Trước khi xử lý bất kỳ câu hỏi nào liên\
+            \ quan đến thời gian (ví dụ: \"tháng này\", \"quý này\", \"tuần qua\"\
+            , \"hôm nay\", \"năm nay\"), BẮT BUỘC sử dụng Tool `current_time` (timezone:\
+            \ \"Asia/Ho_Chi_Minh\") để xác định chính xác ngày, tháng, năm hiện tại\
+            \ trước khi tra cứu dữ liệu.\n\n2. PHÂN QUYỀN THIẾT GIÁP (RBAC STRICT\
+            \ RULE):\n   Bạn nhận các biến phân quyền: `role_level` (1..5), `department`,\
+            \ `department_id`, `emp_id`. BẠN BẮT BUỘC TUÂN THỦ NGHIÊM NGẶT CÁC LUẬT\
+            \ SAU:\n   - NẾU role_level < 3 (Cấp 1 & 2 - Nhân viên / CTV):\n     +\
+            \ CHỈ được phép yêu cầu Tool `Agent_Truy_Xuat_GG_Sheet_Doc_Tool` lấy dữ\
+            \ liệu Nhân viên (NV) của chính họ hoặc trong phạm vi được giao.\n   \
+            \  + TUYỆT ĐỐI TỪ CHỐI nếu user đòi xem dữ liệu cấp Quản lý (QL) hoặc\
+            \ cấp Giám đốc (GD). Khi từ chối, giải thích rõ ràng và lịch sự: \"Yêu\
+            \ cầu của bạn cần quyền hạn Quản lý (role_level >= 3) để truy xuất dữ\
+            \ liệu cấp QL/GD. Bạn hiện có quyền hạn cấp Nhân viên (role_level: [role_level]).\"\
+            \n   - NẾU role_level = 3 hoặc 4 (Cấp 3 & 4 - Trưởng phòng / Quản lý):\n\
+            \     + Được phép yêu cầu Tool lấy dữ liệu cấp Quản lý (QL) hoặc cấp Nhân\
+            \ viên (NV) trong phạm vi phòng ban/chi nhánh quản lý.\n   - NẾU role_level\
+            \ > 4 (Cấp 5 - Ban Giám Đốc):\n     + Được toàn quyền yêu cầu Tool lấy\
+            \ dữ liệu toàn trình (GD, QL, NV) trên toàn bộ các đơn vị.\n\n3. TRUY\
+            \ XUẤT DỮ LIỆU THÔ (DATA RETRIEVAL):\n   - Khi cần tra cứu số liệu chỉ\
+            \ số công việc / KPI / doanh số, gọi Tool: `Agent_Truy_Xuat_GG_Sheet_Doc_Tool`\
+            \ với các tham số:\n     + `role_level`: Cấp bậc của user\n     + `department`:\
+            \ Mã phòng ban (IBB, INF, CSKH, QA, HR, USER)\n     + `department_id`:\
+            \ ID khu vực/phòng ban\n     + `emp_id`: Mã nhân viên\n     + `query`:\
+            \ Nội dung tra cứu chi tiết\n\n4. TỔNG HỢP & PHÂN TÍCH SỐ LIỆU:\n   -\
+            \ Tính toán tỷ lệ hoàn thành KPI, tỷ lệ tăng trưởng, tỷ trọng doanh số\
+            \ / ca xử lý.\n   - Trình bày bảng Markdown phân tích rõ ràng, khoa học.\n\
+            \n5. VẼ BIỂU ĐỒ MINH HỌA (MERMAID CONVERTER):\n   - Với các yêu cầu cần\
+            \ trực quan hóa số liệu, soạn cú pháp Mermaid (pie, xychart-beta...) phù\
+            \ hợp.\n   - BẮT BUỘC gọi Tool `mermaid_converter` với tham số `mermaid_code`\
+            \ và `output_format=\"png\"`.\n   - TUYỆT ĐỐI KHÔNG để block code mermaid\
+            \ thô trong câu trả lời. Hãy chèn link ảnh trả về từ tool theo định dạng:\
+            \ `![Biểu đồ hiệu suất](<url_tra_ve>)`."
+        - id: eb923d06-a60f-4206-bada-a1c2530fef88
+          role: user
+          text: 'Yêu cầu tra cứu/phân tích: {{#1787060000001.query#}}
+
+
+            Thông tin người dùng:
+
+            - Mã NV: {{#1787060000001.emp_id#}}
+
+            - Cấp bậc (role_level): {{#1787060000001.role_level#}}
+
+            - Phòng ban (department): {{#1787060000001.department#}}
+
+            - Khu vực (department_id): {{#1787060000001.department_id#}}'
+        selected: true
+        title: LLM Phân Tích CV
+        type: llm
+        vision:
+          enabled: false
+      height: 132
+      id: '1787060000002'
+      position:
+        x: 450
+        y: 280
+      positionAbsolute:
+        x: 450
+        y: 280
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Xuất kết quả phân tích chỉ số công việc
+        outputs:
+        - value_selector:
+          - '1787060000002'
+          - text
+          variable: result
+        selected: false
+        title: Kết thúc
+        type: end
+      height: 116
+      id: '1787060000003'
+      position:
+        x: 820
+        y: 280
+      positionAbsolute:
+        x: 820
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    viewport:
+      x: -420.8177876420657
+      y: -223.87911318335
+      zoom: 1.5157165665103987
+  rag_pipeline_variables: []

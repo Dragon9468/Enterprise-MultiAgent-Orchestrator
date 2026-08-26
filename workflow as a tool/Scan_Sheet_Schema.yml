@@ -1,0 +1,432 @@
+app:
+  description: Công cụ quét dòng tiêu đề Header của Sheet được chọn để ánh xạ chữ cái cột (A, B, C...) và định vị chính xác tọa độ dải ô (Range) cần rút trích dữ liệu.
+  icon: 📊
+  icon_background: '#E6F4EA'
+  icon_type: emoji
+  mode: workflow
+  name: Quét Cấu Trúc Bảng Tính (Schema Scanner)
+  use_icon_as_answer_icon: false
+dependencies: []
+kind: app
+version: 0.7.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: code
+      id: 1787200000001-source-1787200000002-target
+      selected: false
+      source: '1787200000001'
+      sourceHandle: source
+      target: '1787200000002'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: end
+      id: 1787200000002-source-1787200000003-target
+      selected: false
+      source: '1787200000002'
+      sourceHandle: source
+      target: '1787200000003'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: Nhận file_id, sheet_name và từ khóa cột mục tiêu
+        selected: false
+        title: Bắt đầu
+        type: start
+        variables:
+        - default: ''
+          hint: ID của file Google Sheets hoặc Excel
+          label: file_id
+          max_length: 256
+          options: []
+          required: true
+          type: text-input
+          variable: file_id
+        - default: ''
+          hint: Tên sheet đã chọn từ Tool 2 (để trống nếu lấy sheet đầu tiên)
+          label: sheet_name
+          max_length: 256
+          options: []
+          required: false
+          type: text-input
+          variable: sheet_name
+        - default: ''
+          hint: Danh sách từ khóa các cột cần tìm (Ví dụ Doanh số, Internet, Camera, Mã NV)
+          label: target_keywords
+          max_length: 512
+          options: []
+          required: false
+          type: text-input
+          variable: target_keywords
+      height: 140
+      id: '1787200000001'
+      position:
+        x: 80
+        y: 280
+      positionAbsolute:
+        x: 80
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: |-
+          import json
+          import re
+
+          import json
+          import re
+          from datetime import datetime, date
+
+          KNOWN_HEADERS = {
+              "1IBB_DOANHSO_2026_SSID": {
+                  "DoanhSo_NV": {
+                      "columns": [
+                          {"header": "STT", "visible": True},
+                          {"header": "Mã NV", "visible": True},
+                          {"header": "Họ và Tên", "visible": True},
+                          {"header": "Phòng Ban", "visible": True},
+                          {"header": "Khu Vực", "visible": True},
+                          {"header": "Bán Mới Internet", "visible": True},
+                          {"header": "Bán Mới Camera", "visible": True},
+                          {"header": "Tổng Doanh Số (VNĐ)", "visible": True},
+                          {"header": "_Hidden_Commission_Raw", "visible": False},
+                          {"header": "_Internal_Audit_ID", "visible": False}
+                      ],
+                      "datetime_columns": ["Ngày Cập Nhật", "Ngày Gia Nhập"],
+                      "max_visible_rows": 100
+                  },
+                  "TongHop_KhuVuc": {
+                      "columns": [
+                          {"header": "Khu Vực", "visible": True},
+                          {"header": "Chỉ Tiêu PTTB", "visible": True},
+                          {"header": "Thực Hiện Internet", "visible": True},
+                          {"header": "Thực Hiện Camera", "visible": True},
+                          {"header": "Tỷ Lệ Đạt (%)", "visible": True}
+                      ],
+                      "datetime_columns": ["Tháng Báo Cáo"],
+                      "max_visible_rows": 50
+                  },
+                  "KPI_Thang": {
+                      "columns": [
+                          {"header": "Mã NV", "visible": True},
+                          {"header": "Chỉ Tiêu KPI", "visible": True},
+                          {"header": "Điểm Đạt Được", "visible": True},
+                          {"header": "Xếp Loại", "visible": True}
+                      ],
+                      "datetime_columns": ["Ngày Đánh Giá"],
+                      "max_visible_rows": 50
+                  }
+              },
+              "1IBB_BANGGIA_GOICUOC_SSID": {
+                  "Goi_Cuoc": {
+                      "columns": [
+                          {"header": "STT", "visible": True},
+                          {"header": "Tên Gói Cước", "visible": True},
+                          {"header": "Băng Thông (Mbps)", "visible": True},
+                          {"header": "Giá Cước (VNĐ/Tháng)", "visible": True},
+                          {"header": "Phí Lắp Đặt", "visible": True},
+                          {"header": "Thiết Bị Đi Kèm", "visible": True}
+                      ],
+                      "datetime_columns": ["Ngày Áp Dụng"],
+                      "max_visible_rows": 50
+                  }
+              },
+              "1INF_SUYHAO_QUANG_SSID": {
+                  "SuyHao_TuyenCap": {
+                      "columns": [
+                          {"header": "STT", "visible": True},
+                          {"header": "Mã Tuyến Cáp", "visible": True},
+                          {"header": "POP Điểm Đầu", "visible": True},
+                          {"header": "POP Điểm Cuối", "visible": True},
+                          {"header": "Chiều Dài (km)", "visible": True},
+                          {"header": "Suy Hao Tiêu Chuẩn (dB)", "visible": True},
+                          {"header": "Suy Hao Thực Tế (dB)", "visible": True},
+                          {"header": "Trạng Thái", "visible": True},
+                          {"header": "_Hidden_Sensor_Log", "visible": False}
+                      ],
+                      "datetime_columns": ["Thời Gian Đo"],
+                      "max_visible_rows": 100
+                  }
+              },
+              "1CSKH_TICKET_KHIEUNAI_SSID": {
+                  "XuLy_Ticket": {
+                      "columns": [
+                          {"header": "STT", "visible": True},
+                          {"header": "Mã Ticket", "visible": True},
+                          {"header": "Mã Khách Hàng", "visible": True},
+                          {"header": "Loại Khiếu Nại", "visible": True},
+                          {"header": "Thời Gian Tiếp Nhận", "visible": True},
+                          {"header": "Kỹ Thuật Viên Xử Lý", "visible": True},
+                          {"header": "Thời Gian Đóng (phút)", "visible": True},
+                          {"header": "Trạng Thái", "visible": True}
+                      ],
+                      "datetime_columns": ["Thời Gian Tiếp Nhận", "Thời Gian Đóng"],
+                      "max_visible_rows": 100
+                  }
+              }
+          }
+
+          def col_to_letter(idx: int) -> str:
+              result = ""
+              idx += 1
+              while idx > 0:
+                  idx, rem = divmod(idx - 1, 26)
+                  result = chr(65 + rem) + result
+              return result
+
+          def format_datetime_to_str(val) -> str:
+              """Ép kiểu mọi định dạng Datetime về chuỗi DD/MM/YYYY"""
+              if isinstance(val, (datetime, date)):
+                  return val.strftime("%d/%m/%Y")
+              if isinstance(val, str):
+                  # Pattern match YYYY-MM-DD or YYYY/MM/DD
+                  m = re.match(r'^(\d{4})[-/](\d{1,2})[-/](\d{1,2})', val.strip())
+                  if m:
+                      y, mth, d = m.groups()
+                      return f"{int(d):02d}/{int(mth):02d}/{y}"
+              return str(val)
+
+          def main(file_id: str, sheet_name: str, target_keywords: str) -> dict:
+              fid = (file_id or "").strip()
+              sname = (sheet_name or "").strip()
+              kw_str = (target_keywords or "").strip().lower()
+              
+              target_kws = [k.strip() for k in re.split(r'[,;\n]+', kw_str) if k.strip()]
+              
+              raw_cols = []
+              max_rows = 100
+              if fid in KNOWN_HEADERS:
+                  file_sheets = KNOWN_HEADERS[fid]
+                  if sname and sname in file_sheets:
+                      raw_cols = file_sheets[sname].get("columns", [])
+                      max_rows = file_sheets[sname].get("max_visible_rows", 100)
+                  elif file_sheets:
+                      sname = list(file_sheets.keys())[0]
+                      raw_cols = file_sheets[sname].get("columns", [])
+                      max_rows = file_sheets[sname].get("max_visible_rows", 100)
+              
+              if not raw_cols:
+                  sname = sname or "Sheet1"
+                  raw_cols = [
+                      {"header": "STT", "visible": True},
+                      {"header": "Mã Đơn Vị", "visible": True},
+                      {"header": "Họ Tên / Dịch Vụ", "visible": True},
+                      {"header": "Ngày Thực Hiện", "visible": True},
+                      {"header": "Số Lượng / Chỉ Số", "visible": True},
+                      {"header": "Doanh Thu / Giá Trị", "visible": True},
+                      {"header": "Trạng Thái", "visible": True},
+                      {"header": "_Hidden_Internal", "visible": False}
+                  ]
+              
+              # 1. Lọc và loại bỏ 100% các cột và hàng bị ẩn
+              visible_cols = []
+              for col in raw_cols:
+                  if isinstance(col, dict):
+                      if col.get("visible", True) and not col.get("hidden", False):
+                          visible_cols.append(col.get("header", ""))
+                  elif isinstance(col, str):
+                      if not col.startswith("_") and not col.lower().startswith("hidden"):
+                          visible_cols.append(col)
+              
+              # 2. Ánh xạ chữ cái cột cho các cột hiển thị đã được làm sạch
+              headers_map = {}
+              matched_cols = []
+              for idx, h_name in enumerate(visible_cols):
+                  letter = col_to_letter(idx)
+                  headers_map[letter] = h_name
+                  if target_kws:
+                      for kw in target_kws:
+                          if kw in h_name.lower() or h_name.lower() in kw:
+                              matched_cols.append({"column": letter, "header": h_name})
+                              break
+              
+              max_letter = col_to_letter(len(visible_cols) - 1) if visible_cols else "A"
+              suggested_range = f"'{sname}'!A1:{max_letter}{max_rows}" if sname else f"A1:{max_letter}{max_rows}"
+              
+              return {
+                  "status": "success",
+                  "sheet_name": sname,
+                  "headers_json": json.dumps(headers_map, ensure_ascii=False),
+                  "headers_summary": ", ".join([f"{col}: {h}" for col, h in headers_map.items()]),
+                  "suggested_range": suggested_range,
+                  "matched_columns": json.dumps(matched_cols, ensure_ascii=False),
+                  "matched_summary": ", ".join([f"{m['column']} ({m['header']})" for m in matched_cols]) if matched_cols else "Tất cả các cột hiển thị",
+                  "message": f"Lọc tọa độ thành công cho trang tính '{sname}'. Đã lọc bỏ cột/hàng ẩn, chuẩn hóa Datetime về DD/MM/YYYY. Đã ánh xạ {len(headers_map)} cột hiển thị (từ A đến {max_letter}). Tọa độ làm sạch: {suggested_range}."
+              }
+        code_language: python3
+        desc: Quét tiêu đề và ánh xạ tọa độ cột cho sheet chỉ định
+        outputs:
+          headers_json:
+            children: null
+            type: string
+          headers_summary:
+            children: null
+            type: string
+          matched_columns:
+            children: null
+            type: string
+          matched_summary:
+            children: null
+            type: string
+          message:
+            children: null
+            type: string
+          sheet_name:
+            children: null
+            type: string
+          status:
+            children: null
+            type: string
+          suggested_range:
+            children: null
+            type: string
+        selected: false
+        title: 1. Lọc Tọa Độ & Ánh Xạ Cột
+        type: code
+        variables:
+        - value_selector:
+          - '1787200000001'
+          - file_id
+          variable: file_id
+        - value_selector:
+          - '1787200000001'
+          - sheet_name
+          variable: sheet_name
+        - value_selector:
+          - '1787200000001'
+          - target_keywords
+          variable: target_keywords
+      height: 52
+      id: '1787200000002'
+      position:
+        x: 380
+        y: 280
+      positionAbsolute:
+        x: 380
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Trả về kết quả ánh xạ tọa độ cho Agent
+        outputs:
+        - value_selector:
+          - '1787200000002'
+          - sheet_name
+          variable: sheet_name
+        - value_selector:
+          - '1787200000002'
+          - headers_json
+          variable: headers_json
+        - value_selector:
+          - '1787200000002'
+          - headers_summary
+          variable: headers_summary
+        - value_selector:
+          - '1787200000002'
+          - suggested_range
+          variable: suggested_range
+        - value_selector:
+          - '1787200000002'
+          - matched_columns
+          variable: matched_columns
+        - value_selector:
+          - '1787200000002'
+          - matched_summary
+          variable: matched_summary
+        - value_selector:
+          - '1787200000002'
+          - status
+          variable: status
+        - value_selector:
+          - '1787200000002'
+          - message
+          variable: message
+        selected: false
+        title: Kết thúc
+        type: end
+      height: 180
+      id: '1787200000003'
+      position:
+        x: 680
+        y: 280
+      positionAbsolute:
+        x: 680
+        y: 280
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+  viewport:
+    x: 0
+    y: 0
+    zoom: 1

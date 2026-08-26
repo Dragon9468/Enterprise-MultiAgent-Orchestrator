@@ -1,0 +1,209 @@
+[
+  {
+    "parent_metric_key": "SO_CA_LAP",
+    "parent_metric_name": "Lặp 2 + Lặp 3",
+    "widget_type": "chart_widget",
+    "parent_chart_type": "mini_stacked_bar",
+    "sub_chart_type": "stacked_bar",
+    "unit": "lần",
+    "kpi_target": 15,
+    "polarity": "lower_is_better",
+    "icon": "Radio",
+    "color_theme": "cyan",
+    "modal_title": "Phân Tích Chi Tiết Ca Lặp Kỹ Thuật",
+    "modal_icon": "Radio",
+    "summary_cards": [
+      {
+        "key": "Lap_2",
+        "label": "Ca Lặp 2",
+        "color": "#f97316",
+        "sub_label": "Lặp lần 2"
+      },
+      {
+        "key": "Lap_3",
+        "label": "Ca Lặp 3",
+        "color": "#ef4444",
+        "sub_label": "Lặp lần 3"
+      }
+    ],
+    "sub_metrics": [
+      {
+        "key": "Lap_2",
+        "name": "Lặp 2",
+        "unit": "lần",
+        "min_val": 0,
+        "max_val": null,
+        "color": "#f97316",
+        "polarity": "lower_is_better"
+      },
+      {
+        "key": "Lap_3",
+        "name": "Lặp 3",
+        "unit": "lần",
+        "min_val": 0,
+        "max_val": null,
+        "color": "#ef4444",
+        "polarity": "lower_is_better"
+      }
+    ]
+  },
+  {
+    "parent_metric_key": "TY_LE_RM",
+    "parent_metric_name": "Tỷ Lệ Rời Mạng (RM)",
+    "widget_type": "chart_widget",
+    "parent_chart_type": "mini_donut",
+    "sub_chart_type": "bar_horizontal",
+    "unit": "%",
+    "kpi_target": 2.5,
+    "polarity": "lower_is_better",
+    "icon": "Wifi",
+    "color_theme": "rose",
+    "modal_title": "Phân Tích Chi Tiết Tỷ Lệ Rời Mạng",
+    "modal_icon": "BarChart2",
+    "summary_cards": [
+      {
+        "key": "Ty_Le_RM",
+        "label": "Tỷ Lệ Rời Mạng",
+        "color": "#a855f7",
+        "sub_label": "Chỉ số chính"
+      },
+      {
+        "key": "Ty_Le_Huy_CLDV",
+        "label": "% Hủy Do CLDV",
+        "color": "#0ea5e9",
+        "sub_label": "Chất lượng dịch vụ"
+      },
+      {
+        "key": "NET",
+        "label": "NET (Phát Triển Ròng)",
+        "color": "#f59e0b",
+        "sub_label": "Công thức: - Rời Mạng + PTTB"
+      }
+    ],
+    "sub_metrics": [
+      {
+        "key": "Yeu_Cau_Huy",
+        "name": "Yêu Cầu Hủy",
+        "unit": "ca",
+        "min_val": 0,
+        "max_val": null,
+        "color": "#3b82f6",
+        "polarity": "lower_is_better"
+      },
+      {
+        "key": "CTBDV_DK",
+        "name": "CTBDV ĐK",
+        "unit": "ca",
+        "min_val": 0,
+        "max_val": null,
+        "color": "#8b5cf6",
+        "polarity": "lower_is_better"
+      },
+      {
+        "key": "KPDV",
+        "name": "KPDV",
+        "unit": "ca",
+        "min_val": 0,
+        "max_val": null,
+        "color": "#f59e0b",
+        "polarity": "lower_is_better"
+      },
+      {
+        "key": "PTTB",
+        "name": "PTTB",
+        "unit": "ca",
+        "min_val": 0,
+        "max_val": null,
+        "color": "#ec4899",
+        "polarity": "higher_is_better"
+      }
+    ]
+  },
+  {
+    "parent_metric_key": "SUY_HAO",
+    "parent_metric_name": "Suy Hao",
+    "widget_type": "simple_card",
+    "parent_chart_type": "none",
+    "sub_chart_type": null,
+    "unit": "ca",
+    "kpi_target": 5,
+    "polarity": "lower_is_better",
+    "icon": "ShieldAlert",
+    "color_theme": "amber",
+    "modal_title": "Chi Tiết Số Ca Chạm Ngưỡng Suy Hao",
+    "modal_icon": "ShieldAlert",
+    "summary_cards": [
+      {
+        "key": "Suy_Hao",
+        "label": "Số Ca Suy Hao",
+        "color": "#f59e0b",
+        "sub_label": "Số ca chạm ngưỡng cảnh báo"
+      }
+    ],
+    "sub_metrics": []
+  },
+  {
+    "parent_metric_key": "TIME_TK_BT",
+    "parent_metric_name": "Thời Gian TK-BT",
+    "widget_type": "simple_card",
+    "parent_chart_type": "none",
+    "sub_chart_type": "line",
+    "unit": "giờ",
+    "kpi_target": 24,
+    "polarity": "lower_is_better",
+    "icon": "Cpu",
+    "color_theme": "sky",
+    "modal_title": "Chi Tiết Thời Gian Triển Khai & Bảo Trì",
+    "modal_icon": "Cpu",
+    "summary_cards": [],
+    "sub_metrics": []
+  },
+  {
+    "parent_metric_key": "TY_LE_MOBILE_APP",
+    "parent_metric_name": "Tỷ Lệ Mobile App",
+    "widget_type": "chart_widget",
+    "parent_chart_type": "mini_donut",
+    "sub_chart_type": "multi_layer_concentric_donut",
+    "unit": "%",
+    "kpi_target": 85,
+    "polarity": "higher_is_better",
+    "icon": "Zap",
+    "color_theme": "amber",
+    "modal_title": "Chi Tiết Tỷ Lệ Sử Dụng Mobile App",
+    "modal_icon": "Zap",
+    "summary_cards": [],
+    "sub_metrics": []
+  },
+  {
+    "parent_metric_key": "BILL_TON",
+    "parent_metric_name": "Bill Tồn",
+    "widget_type": "simple_card",
+    "parent_chart_type": "none",
+    "sub_chart_type": "area",
+    "unit": "bill",
+    "kpi_target": 10,
+    "polarity": "lower_is_better",
+    "icon": "HardDrive",
+    "color_theme": "purple",
+    "modal_title": "Chi Tiết Tồn Đọng Bill Dịch Vụ",
+    "modal_icon": "HardDrive",
+    "summary_cards": [],
+    "sub_metrics": []
+  },
+  {
+    "parent_metric_key": "TY_LE_TT_ONLINE",
+    "parent_metric_name": "Thanh Toán Online",
+    "widget_type": "chart_widget",
+    "parent_chart_type": "mini_donut",
+    "sub_chart_type": "donut",
+    "unit": "%",
+    "kpi_target": 90,
+    "polarity": "higher_is_better",
+    "icon": "Activity",
+    "color_theme": "teal",
+    "modal_title": "Chi Tiết Tỷ Lệ Thanh Toán Online",
+    "modal_icon": "Activity",
+    "summary_cards": [],
+    "sub_metrics": []
+  }
+]

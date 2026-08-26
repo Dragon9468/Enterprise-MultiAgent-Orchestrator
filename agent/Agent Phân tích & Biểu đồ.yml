@@ -1,0 +1,155 @@
+app:
+  description: Agent Chuyên gia Phân tích Số liệu và Trực quan hóa Biểu đồ. Tích hợp Tool Truy xuất dữ liệu đa nguồn và Plugin chuyển đổi Mermaid sang hình ảnh tĩnh.
+  icon: 📊
+  icon_background: '#D5D9EB'
+  icon_type: emoji
+  mode: agent
+  name: Agent Phân tích & Biểu đồ
+  use_icon_as_answer_icon: false
+kind: app
+version: 0.7.0
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.9.4@9127fda25bd652152a418514dd05c2e88e17883fbf625650f2a8ba2808adf8b9
+    version: null
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: hjlarry/mermaid_converter:0.0.1@46e755f0d92566a1f7a6e85086eac02a735afaa41479e7a2277b150abda70b18
+    version: null
+agent:
+  package_ref: agent_1
+agent_packages:
+  agent_1:
+    metadata:
+      description: Agent Phân tích & Biểu đồ hỗ trợ tính toán, thống kê và render biểu đồ Mermaid tĩnh.
+      icon: 📊
+      icon_background: '#D5D9EB'
+      icon_type: emoji
+      name: Agent Phân tích & Biểu đồ
+      role: Data Analytics & Chart Visualization Specialist
+    omitted_assets: []
+    schema_version: 1
+    soul:
+      app_features:
+        file_upload:
+          allowed_file_extensions:
+          - JPG
+          - JPEG
+          - PNG
+          - GIF
+          - WEBP
+          - SVG
+          allowed_file_types:
+          - document
+          - image
+          - audio
+          - video
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          enabled: true
+          image:
+            enabled: true
+          number_limits: 3
+        opening_statement: null
+        retriever_resource: null
+        sensitive_word_avoidance: null
+        speech_to_text: null
+        suggested_questions: null
+        suggested_questions_after_answer: null
+        text_to_speech: null
+      app_variables:
+      - default: ''
+        description: 'Mã nhân viên'
+        name: emp_id
+        required: false
+        type: string
+        value_enum: []
+      - default: '1'
+        description: 'Cấp bậc người dùng (1: NV, 2: Chuyên viên, 3: Trưởng nhóm, 4: Trưởng phòng, 5: Ban Giám Đốc)'
+        name: role_level
+        required: false
+        type: string
+        value_enum: []
+      - default: 'IBB'
+        description: 'Phòng ban (IBB, USER, INF, CSKH, QA, HR)'
+        name: department
+        required: false
+        type: string
+        value_enum: []
+      - default: '1'
+        description: 'ID phòng ban / khu vực (1, 2, 3, ALL)'
+        name: department_id
+        required: false
+        type: string
+        value_enum: []
+      config_files: []
+      config_note: ''
+      config_skills: []
+      env:
+        secret_refs: []
+        variables: []
+      files:
+        files: []
+        skills: []
+      human:
+        contacts: []
+        tools: []
+      knowledge:
+        sets: []
+      memory:
+        artifacts: []
+        budget: null
+        scope: null
+      misc_legacy: {}
+      model:
+        credential_ref: null
+        model: gemini-3.6-flash
+        model_provider: langgenius/gemini/google
+        model_settings:
+          frequency_penalty: null
+          max_tokens: null
+          presence_penalty: null
+          response_format: null
+          stop: null
+          temperature: 0.2
+          top_p: null
+        plugin_id: langgenius/gemini
+      prompt:
+        system_prompt: "Bạn là \"Agent Phân tích & Biểu đồ\" thuộc hệ thống Enterprise Multi-Agent.\nVai trò của bạn là Chuyên gia Phân tích Số liệu và Trực quan hóa Dữ liệu (Data Analytics & Visualization Specialist).\n\n=== QUY TRÌNH XỬ LÝ 5 BƯỚC BẮT BUỘC ===\n\n1. BƯỚC 1: TRUY XUẤT DỮ LIỆU THÔ (NẾU CẦN)\n   - Nếu câu hỏi cần tra cứu số liệu hệ thống từ tài liệu/Google Sheets, hãy gọi Tool: `Agent_Truy_Xuat_GG_Sheet_Doc_Tool`.\n   - Truyền đầy đủ các tham số:\n     + `role_level`: Cấp bậc (1..5)\n     + `department`: Mã phòng ban (IBB, USER, INF, CSKH, QA, HR)\n     + `department_id`: ID khu vực/phòng ban (1, 2, 3, ALL)\n     + `query`: Câu hỏi tra cứu chi tiết.\n   - Nếu người dùng đã cung cấp sẵn số liệu trong câu hỏi, sử dụng ngay số liệu đó.\n\n2. BƯỚC 2: TỔNG HỢP & TÍNH TOÁN\n   - Tổng hợp, nhóm dữ liệu, tính tổng, tỷ lệ phần trăm (% tỷ trọng), trung bình hoặc KPI.\n\n3. BƯỚC 3: KIỂM TRA GUARDRAILS AN TOÀN TRƯỚC KHI VẼ BIỂU ĐỒ (BẮT BUỘC)\n   - Guardrail 1: Nếu tổng số điểm dữ liệu (data points) > 30 điểm -> TỪ CHỐI VẼ BIỂU ĐỒ.\n   - Guardrail 2: Nếu yêu cầu so sánh chéo > 4 phòng ban/khu vực -> TỪ CHỐI VẼ BIỂU ĐỒ.\n   \n   KHI BỊ TỪ CHỐI BỞI GUARDRAILS:\n   - Thông báo rõ: \"Dữ liệu yêu cầu vượt quá giới hạn trực quan an toàn (> 30 điểm dữ liệu hoặc > 4 phòng ban) nên hệ thống không tạo biểu đồ để tránh quá tải.\"\n   - Trình bày toàn bộ số liệu bằng Bảng Markdown chi tiết kèm tóm tắt tổng quan.\n\n4. BƯỚC 4: RENDER BIỂU ĐỒ THÀNH ẢNH (BẮT BUỘC QUA TOOL MERMAID_CONVERTER)\n   Nếu số liệu THỎA MÃN Guardrails (<= 30 điểm dữ liệu và <= 4 phòng ban):\n   - Soạn cú pháp Mermaid phù hợp:\n     + Biểu đồ tròn: `pie title ... \"Label\" : value`\n     + Biểu đồ cột/đường: `xychart-beta ...`\n   - QUY TẮC QUAN TRỌNG NHẤT:\n     + TUYỆT ĐỐI KHÔNG xuất block code ```mermaid thô trong câu trả lời.\n     + BẮT BUỘC PHẢI GỌI TOOL `mermaid_converter` với tham số `mermaid_code` chứa đoạn mã Mermaid vừa soạn và `output_format=\"png\"`.\n     + Lấy đường link hình ảnh trả về từ tool và chèn vào câu trả lời: `![Biểu đồ](<url_tra_ve>)`.\n\n5. BƯỚC 5: ĐỊNH DẠNG CÂU TRẢ LỜI\n   - Ảnh biểu đồ: `![Biểu đồ](<url_tra_ve>)`\n   - Bảng tóm tắt số liệu (Markdown Table)\n   - Nhận xét phân tích ngắn gọn, súc tích.\n"
+      sandbox:
+        config:
+          cpu: null
+          env: []
+          image: null
+          working_dir: null
+        provider: null
+      schema_version: 1
+      tools:
+        cli_tools: []
+        dify_tools:
+        - credential_ref: null
+          credential_type: unauthorized
+          description: Truy xuất dữ liệu Google Sheets và Tài liệu Google Drive theo Ma trận Phân quyền 3 Biến
+          enabled: true
+          name: Agent_Truy_Xuat_GG_Sheet_Doc_Tool
+          plugin_id: null
+          provider: Agent_Truy_Xuat_GG_Sheet_Doc_Tool
+          provider_id: b453eb00-c65c-4243-92bd-e0c5e88e9a09
+          provider_type: workflow
+          runtime_parameters: {}
+          tool_name: Agent_Truy_Xuat_GG_Sheet_Doc_Tool
+        - credential_ref: null
+          credential_type: unauthorized
+          description: Chuyển đổi mã biểu đồ Mermaid thành liên kết hình ảnh tĩnh (PNG, JPG, SVG, PDF)
+          enabled: true
+          name: mermaid_converter
+          plugin_id: hjlarry/mermaid_converter
+          provider: mermaid_converter
+          provider_id: hjlarry/mermaid_converter/mermaid_converter
+          provider_type: plugin
+          runtime_parameters: {}
+          tool_name: mermaid_converter

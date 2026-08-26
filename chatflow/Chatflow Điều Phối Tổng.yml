@@ -1,0 +1,1223 @@
+app:
+  description: Chatflow Điều Phối Tổng tiếp nhận input, định tuyến ngữ cảnh, phân
+    quyền 3 biến và điều phối Agent chuyên trách.
+  icon: ⚡
+  icon_background: '#E8F0FE'
+  icon_type: emoji
+  mode: advanced-chat
+  name: Chatflow Điều Phối Tổng
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/gemini:0.9.4@9127fda25bd652152a418514dd05c2e88e17883fbf625650f2a8ba2808adf8b9
+    version: null
+kind: app
+version: 0.7.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      config:
+        inputs_config:
+          enabled: true
+          preset_response: ⚠️ Yêu cầu của bạn chứa từ khóa bị hạn chế theo tiêu chuẩn
+            an toàn bảo mật (OWASP LLM01 - Prompt Injection). Vui lòng điều chỉnh
+            lại câu hỏi.
+        keywords: 'bỏ qua lệnh
+
+          ignore instructions
+
+          in ra tất cả
+
+          hệ thống'
+        outputs_config:
+          enabled: true
+          preset_response: ⚠️ Phản hồi chứa nội dung nhạy cảm đã bị chặn bởi hệ thống
+            kiểm duyệt an toàn.
+      enabled: true
+      type: keywords
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: tool
+        targetType: answer
+      id: 1787050000010-source-ans_mang-target
+      selected: false
+      source: '1787050000010'
+      sourceHandle: source
+      target: ans_mang
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: tool
+        targetType: answer
+      id: 1787060000010-source-17865048008700-target
+      selected: false
+      source: '1787060000010'
+      sourceHandle: source
+      target: '17865048008700'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: tool
+      id: if_else_router-case_2-1787050000010-target
+      selected: false
+      source: if_else_router
+      sourceHandle: case_2
+      target: '1787050000010'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: knowledge-retrieval
+      id: if_else_router-case_3-kr_thietbi-target
+      selected: false
+      source: if_else_router
+      sourceHandle: case_3
+      target: kr_thietbi
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: knowledge-retrieval
+      id: if_else_router-case_4-kr_giacuoc-target
+      selected: false
+      source: if_else_router
+      sourceHandle: case_4
+      target: kr_giacuoc
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: tool
+      id: if_else_router-case_5-1787060000010-target
+      selected: false
+      source: if_else_router
+      sourceHandle: case_5
+      target: '1787060000010'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: knowledge-retrieval
+      id: if_else_router-false-kr_hanhchinh-target
+      selected: false
+      source: if_else_router
+      sourceHandle: 'false'
+      target: kr_hanhchinh
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: kr_giacuoc-source-llm_giacuoc-target
+      source: kr_giacuoc
+      sourceHandle: source
+      target: llm_giacuoc
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: kr_hanhchinh-source-llm_hanhchinh-target
+      source: kr_hanhchinh
+      sourceHandle: source
+      target: llm_hanhchinh
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: knowledge-retrieval
+        targetType: llm
+      id: kr_thietbi-source-llm_thietbi-target
+      source: kr_thietbi
+      sourceHandle: source
+      target: llm_thietbi
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: llm_chung-source-ans_chung-target
+      selected: false
+      source: llm_chung
+      sourceHandle: source
+      target: ans_chung
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: llm_giacuoc-source-ans_giacuoc-target
+      selected: false
+      source: llm_giacuoc
+      sourceHandle: source
+      target: ans_giacuoc
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: llm_hanhchinh-source-ans_hanhchinh-target
+      selected: false
+      source: llm_hanhchinh
+      sourceHandle: source
+      target: ans_hanhchinh
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: llm_thietbi-source-ans_thietbi-target
+      selected: false
+      source: llm_thietbi
+      sourceHandle: source
+      target: ans_thietbi
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: if-else
+      id: start-source-if_else_router-target
+      selected: false
+      source: start
+      sourceHandle: source
+      target: if_else_router
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: llm
+      id: if_else_router-true-llm_chung-target
+      source: if_else_router
+      sourceHandle: 'true'
+      target: llm_chung
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        answer: '{{#1787060000010.text#}}'
+        desc: ''
+        isInIteration: false
+        isInLoop: false
+        iteration_id: null
+        loop_id: null
+        selected: false
+        title: Answer Chỉ số CV
+        type: answer
+        variables: []
+      height: 102
+      id: '17865048008700'
+      position:
+        x: 2150
+        y: 750
+      positionAbsolute:
+        x: 2150
+        y: 750
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Thực thi Agent Truy xuất dữ liệu Google Sheets & Drive theo phân quyền
+          3 biến
+        is_team_authorization: true
+        meta: null
+        paramSchemas:
+        - auto_generate: null
+          default: ''
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          input_schema: null
+          label:
+            en_US: query
+            ja_JP: query
+            pt_BR: query
+            zh_Hans: query
+          llm_description: ''
+          max: null
+          min: null
+          multiple: false
+          name: query
+          options: []
+          placeholder:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: '1'
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          input_schema: null
+          label:
+            en_US: role_level
+            ja_JP: role_level
+            pt_BR: role_level
+            zh_Hans: role_level
+          llm_description: ''
+          max: null
+          min: null
+          multiple: false
+          name: role_level
+          options: []
+          placeholder:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: IBB
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          input_schema: null
+          label:
+            en_US: department
+            ja_JP: department
+            pt_BR: department
+            zh_Hans: department
+          llm_description: ''
+          max: null
+          min: null
+          multiple: false
+          name: department
+          options: []
+          placeholder:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: '1'
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          input_schema: null
+          label:
+            en_US: department_id
+            ja_JP: department_id
+            pt_BR: department_id
+            zh_Hans: department_id
+          llm_description: ''
+          max: null
+          min: null
+          multiple: false
+          name: department_id
+          options: []
+          placeholder:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: anonymous
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          input_schema: null
+          label:
+            en_US: emp_id
+            ja_JP: emp_id
+            pt_BR: emp_id
+            zh_Hans: emp_id
+          llm_description: ''
+          max: null
+          min: null
+          multiple: false
+          name: emp_id
+          options: []
+          placeholder:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        params:
+          department: '{{#start.department#}}'
+          department_id: '{{#start.department_id#}}'
+          emp_id: '{{#start.emp_id#}}'
+          query: '{{#sys.query#}}'
+          role_level: '{{#start.role_level#}}'
+        provider_id: b453eb00-c65c-4243-92bd-e0c5e88e9a09
+        provider_name: Workflow Truy Xuất GG Sheet + Doc
+        provider_type: workflow
+        selected: false
+        title: Agent Truy Xuất GG Sheet + Doc
+        tool_configurations: {}
+        tool_description: Thực thi Agent Truy xuất dữ liệu Google Sheets & Drive theo
+          phân quyền 3 biến
+        tool_label: Agent Truy Xuất GG Sheet + Doc
+        tool_name: Agent_Truy_Xuat_GG_Sheet_Doc_Tool
+        tool_node_version: '2'
+        tool_parameters:
+          department:
+            type: mixed
+            value: '{{#start.department#}}'
+          department_id:
+            type: mixed
+            value: '{{#start.department_id#}}'
+          emp_id:
+            type: mixed
+            value: '{{#start.emp_id#}}'
+          query:
+            type: mixed
+            value: '{{#sys.query#}}'
+          role_level:
+            type: mixed
+            value: '{{#start.role_level#}}'
+        type: tool
+      height: 96
+      id: '1787050000010'
+      position:
+        x: 950
+        y: -50
+      positionAbsolute:
+        x: 950
+        y: -50
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Agent Chuyên gia Phân tích Chỉ số Công việc & Báo cáo Hiệu suất
+          theo ma trận phân quyền 3 biến
+        is_team_authorization: true
+        meta: null
+        paramSchemas:
+        - default: ''
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          label:
+            en_US: query
+            ja_JP: query
+            pt_BR: query
+            zh_Hans: query
+          llm_description: ''
+          name: query
+          options: []
+          placeholder:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          required: true
+          type: string
+        - default: '1'
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          label:
+            en_US: role_level
+            ja_JP: role_level
+            pt_BR: role_level
+            zh_Hans: role_level
+          llm_description: ''
+          name: role_level
+          options: []
+          placeholder:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          required: false
+          type: string
+        - default: IBB
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          label:
+            en_US: department
+            ja_JP: department
+            pt_BR: department
+            zh_Hans: department
+          llm_description: ''
+          name: department
+          options: []
+          placeholder:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          required: false
+          type: string
+        - default: '1'
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          label:
+            en_US: department_id
+            ja_JP: department_id
+            pt_BR: department_id
+            zh_Hans: department_id
+          llm_description: ''
+          name: department_id
+          options: []
+          placeholder:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          required: false
+          type: string
+        - default: anonymous
+          form: llm
+          human_description:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          label:
+            en_US: emp_id
+            ja_JP: emp_id
+            pt_BR: emp_id
+            zh_Hans: emp_id
+          llm_description: ''
+          name: emp_id
+          options: []
+          placeholder:
+            en_US: ''
+            ja_JP: ''
+            pt_BR: ''
+            zh_Hans: ''
+          required: false
+          type: string
+        params:
+          department: '{{#start.department#}}'
+          department_id: '{{#start.department_id#}}'
+          emp_id: '{{#start.emp_id#}}'
+          query: '{{#sys.query#}}'
+          role_level: '{{#start.role_level#}}'
+        provider_id: c812ef00-c65c-4243-92bd-e0c5e88e9b01
+        provider_name: Workflow Phân Tích CV
+        provider_type: workflow
+        selected: false
+        title: Agent Phân Tích CV
+        tool_configurations: {}
+        tool_description: Agent Chuyên gia Phân tích Chỉ số Công việc & Báo cáo Hiệu
+          suất theo ma trận phân quyền 3 biến
+        tool_label: Agent Phân Tích CV
+        tool_name: Agent_Phan_Tich_CV_Tool
+        tool_node_version: '2'
+        tool_parameters:
+          department:
+            type: mixed
+            value: '{{#start.department#}}'
+          department_id:
+            type: mixed
+            value: '{{#start.department_id#}}'
+          emp_id:
+            type: mixed
+            value: '{{#start.emp_id#}}'
+          query:
+            type: mixed
+            value: '{{#sys.query#}}'
+          role_level:
+            type: mixed
+            value: '{{#start.role_level#}}'
+        type: tool
+      height: 112
+      id: '1787060000010'
+      position:
+        x: 950
+        y: 480
+      positionAbsolute:
+        x: 950
+        y: 480
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        answer: '{{#llm_chung.text#}}'
+        selected: false
+        title: Answer Chung
+        type: answer
+      height: 102
+      id: ans_chung
+      position:
+        x: 1550
+        y: -250
+      positionAbsolute:
+        x: 1550
+        y: -250
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        answer: '{{#llm_giacuoc.text#}}'
+        selected: false
+        title: Answer Giá cước
+        type: answer
+      height: 102
+      id: ans_giacuoc
+      position:
+        x: 1550
+        y: 350
+      positionAbsolute:
+        x: 1550
+        y: 350
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        answer: '{{#llm_hanhchinh.text#}}'
+        selected: false
+        title: Answer Hành chính
+        type: answer
+      height: 102
+      id: ans_hanhchinh
+      position:
+        x: 1550
+        y: 550
+      positionAbsolute:
+        x: 1550
+        y: 550
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        answer: '{{#1787050000010.result#}}{{#1787050000010.text#}}'
+        selected: false
+        title: Answer Phân Tích & Biểu Đồ
+        type: answer
+      height: 120
+      id: ans_mang
+      position:
+        x: 1550
+        y: -50
+      positionAbsolute:
+        x: 1550
+        y: -50
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        answer: '{{#llm_thietbi.text#}}'
+        selected: false
+        title: Answer Thiết bị
+        type: answer
+      height: 102
+      id: ans_thietbi
+      position:
+        x: 1550
+        y: 150
+      positionAbsolute:
+        x: 1550
+        y: 150
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: contains
+            id: b5604ceb-5458-4e92-b757-f8d004f4496d
+            value: Chung
+            varType: string
+            variable_selector:
+            - start
+            - sys_topic
+          id: 'true'
+          logical_operator: and
+        - case_id: case_2
+          conditions:
+          - comparison_operator: contains
+            id: 50cbdc5d-9aa6-4222-af4e-5252ac86d7a3
+            value: Doc & Sheet
+            varType: string
+            variable_selector:
+            - start
+            - sys_topic
+          id: case_2
+          logical_operator: and
+        - case_id: case_3
+          conditions:
+          - comparison_operator: contains
+            id: d7b4a1f2-ca8c-452c-8d1e-c3ff317aa4d2
+            value: Thiết bị
+            varType: string
+            variable_selector:
+            - start
+            - sys_topic
+          id: case_3
+          logical_operator: and
+        - case_id: case_4
+          conditions:
+          - comparison_operator: contains
+            id: f686ffa4-271e-4aa6-b54f-37d220d09464
+            value: Giá cước
+            varType: string
+            variable_selector:
+            - start
+            - sys_topic
+          id: case_4
+          logical_operator: and
+        - case_id: case_5
+          conditions:
+          - comparison_operator: contains
+            id: 8f42a1b9-3c1e-4589-9a7b-123456789abc
+            value: Chỉ số CV
+            varType: string
+            variable_selector:
+            - start
+            - sys_topic
+          id: case_5
+          logical_operator: and
+        desc: Rẽ nhánh 6 chủ đề từ Frontend
+        selected: false
+        title: Định tuyến 6 Nhánh (Topic)
+        type: if-else
+      height: 464
+      id: if_else_router
+      position:
+        x: 350
+        y: 150
+      positionAbsolute:
+        x: 350
+        y: 150
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - X95AIUMtYeT/dG1Totf19LfwVvr8OkLxTuair83E8Fymc5FrTCjIRR3F/7b6lmtW
+        desc: Truy xuất tài liệu Giá cước
+        query_attachment_selector: []
+        query_variable_selector:
+        - sys
+        - query
+        retrieval_mode: single
+        selected: false
+        single_retrieval_config:
+          model:
+            completion_params: {}
+            mode: chat
+            name: gemini-3.6-flash
+            provider: langgenius/gemini/google
+        title: KR Giá cước
+        type: knowledge-retrieval
+      height: 118
+      id: kr_giacuoc
+      position:
+        x: 650
+        y: 350
+      positionAbsolute:
+        x: 650
+        y: 350
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - K2CAfkFCiKl1vqSW60+LvRmVlTtrNB5Vs9+SjV8JdhJMKwboV1iKXdgKR9wyY8NM
+        desc: Truy xuất tài liệu Hành chính
+        query_attachment_selector: []
+        query_variable_selector:
+        - sys
+        - query
+        retrieval_mode: single
+        selected: false
+        single_retrieval_config:
+          model:
+            completion_params: {}
+            mode: chat
+            name: gemini-3.6-flash
+            provider: langgenius/gemini/google
+        title: KR Hành chính
+        type: knowledge-retrieval
+      height: 118
+      id: kr_hanhchinh
+      position:
+        x: 650
+        y: 550
+      positionAbsolute:
+        x: 650
+        y: 550
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        dataset_ids:
+        - Rtzy8TALRbpbiYsh4h/i1N/oZobzguN4jFDPNbGszdEHRm8n7R39Y/KBcDM65Ese
+        desc: Truy xuất tài liệu Thiết bị
+        query_attachment_selector: []
+        query_variable_selector:
+        - sys
+        - query
+        retrieval_mode: single
+        selected: false
+        single_retrieval_config:
+          model:
+            completion_params: {}
+            mode: chat
+            name: gemini-3.6-flash
+            provider: langgenius/gemini/google
+        title: KR Thiết bị
+        type: knowledge-retrieval
+      height: 118
+      id: kr_thietbi
+      position:
+        x: 650
+        y: 150
+      positionAbsolute:
+        x: 650
+        y: 150
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gemini-3.6-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: 27578d95-0d4e-4f91-9516-d55040361ccf
+          role: system
+          text: 'Bạn là Trợ lý AI đa năng, tư vấn chung của Enterprise AI Platform.
+
+            Trả lời dựa trên tài liệu sau:
+
+
+            {{#context#}}
+
+
+            Context từ Frontend: {{#start.base_context#}}
+
+
+            [TỪ ĐIỂN THUẬT NGỮ HỖ TRỢ]
+
+            {{#start.system_dict#}}'
+        - id: a31477b4-29f6-4c42-9cc6-a9971e7a1b64
+          role: user
+          text: '{{#sys.query#}}'
+        selected: false
+        title: LLM Chung
+        type: llm
+      height: 88
+      id: llm_chung
+      position:
+        x: 1250
+        y: -250
+      positionAbsolute:
+        x: 1250
+        y: -250
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - kr_giacuoc
+          - result
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gemini-3.6-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: 887764ab-30a5-433e-b25a-7611b6f2aba8
+          role: system
+          text: 'Bạn là Chuyên gia Tư vấn Giá cước và Khuyến mãi của Enterprise AI Platform.
+
+            Trả lời dựa trên tài liệu sau:
+
+
+            {{#context#}}
+
+
+            Context từ Frontend: {{#start.base_context#}}
+
+
+            [TỪ ĐIỂN THUẬT NGỮ HỖ TRỢ]
+
+            {{#start.system_dict#}}'
+        - id: 0ef69b01-ed84-4077-aeb7-90dcab453358
+          role: user
+          text: '{{#sys.query#}}'
+        selected: false
+        title: LLM Giá cước
+        type: llm
+      height: 88
+      id: llm_giacuoc
+      position:
+        x: 1250
+        y: 350
+      positionAbsolute:
+        x: 1250
+        y: 350
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - kr_hanhchinh
+          - result
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gemini-3.6-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: e6b93efc-3ed1-4429-b0a5-13fe75523e3a
+          role: system
+          text: 'Bạn là Chuyên viên Hành chính nhân sự của Enterprise AI Platform.
+
+            Trả lời dựa trên tài liệu sau:
+
+
+            {{#context#}}
+
+
+            Context từ Frontend: {{#start.base_context#}}
+
+
+            [TỪ ĐIỂN THUẬT NGỮ HỖ TRỢ]
+
+            {{#start.system_dict#}}'
+        - id: 0e7485cc-48a9-4dc1-8d67-8123979ada30
+          role: user
+          text: '{{#sys.query#}}'
+        selected: false
+        title: LLM Hành chính
+        type: llm
+      height: 88
+      id: llm_hanhchinh
+      position:
+        x: 1250
+        y: 550
+      positionAbsolute:
+        x: 1250
+        y: 550
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: true
+          variable_selector:
+          - kr_thietbi
+          - result
+        desc: ''
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: gemini-3.6-flash
+          provider: langgenius/gemini/google
+        prompt_template:
+        - id: 440de5cb-6bf3-4ba9-a165-330406595c9b
+          role: system
+          text: 'Bạn là Chuyên gia phần cứng và Thiết bị công nghệ của Enterprise AI Platform.
+
+            Trả lời dựa trên tài liệu sau:
+
+
+            {{#context#}}
+
+
+            Context từ Frontend: {{#start.base_context#}}
+
+
+            [TỪ ĐIỂN THUẬT NGỮ HỖ TRỢ]
+
+            {{#start.system_dict#}}'
+        - id: 44c4822b-7c90-45d6-831c-55fb2c344c90
+          role: user
+          text: '{{#sys.query#}}'
+        selected: false
+        title: LLM Thiết bị
+        type: llm
+      height: 88
+      id: llm_thietbi
+      position:
+        x: 1250
+        y: 150
+      positionAbsolute:
+        x: 1250
+        y: 150
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: ''
+        selected: false
+        title: Bắt đầu
+        type: start
+        variables:
+        - default: ''
+          label: System Topic
+          required: false
+          type: text-input
+          variable: sys_topic
+        - default: ''
+          label: Base Context
+          required: false
+          type: text-input
+          variable: base_context
+        - default: ''
+          hint: ''
+          label: emp_id
+          options: []
+          placeholder: ''
+          required: false
+          type: text-input
+          variable: emp_id
+        - default: '1'
+          hint: 'Cấp bậc phân quyền (1: NV, 2: Chuyên viên, 3: Trưởng nhóm, 4: Trưởng
+            phòng, 5: Ban Giám Đốc)'
+          label: role_level
+          options: []
+          placeholder: '1'
+          required: false
+          type: text-input
+          variable: role_level
+        - default: IBB
+          hint: Khối phòng ban (IBB, USER, INF, CSKH, QA, HR)
+          label: department
+          options: []
+          placeholder: IBB
+          required: false
+          type: text-input
+          variable: department
+        - default: '1'
+          hint: Mã khu vực / đơn vị con (1, 2, 3, ALL)
+          label: department_id
+          options: []
+          placeholder: '1'
+          required: false
+          type: text-input
+          variable: department_id
+        - default: ''
+          label: system_dict
+          options: []
+          required: false
+          type: text-input
+          variable: system_dict
+      height: 265
+      id: start
+      position:
+        x: 80
+        y: 282
+      positionAbsolute:
+        x: 80
+        y: 282
+      selected: false
+      sourcePosition: null
+      targetPosition: null
+      type: custom
+      width: 242
+      zIndex: 0
+    viewport:
+      x: -519.350506549079
+      y: 300.42642859594264
+      zoom: 0.609385394307287
+  rag_pipeline_variables: []
